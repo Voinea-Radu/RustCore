@@ -12,15 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EventManager implements Listener {
 
     private final Main plugin;
-    public List<User> buildHammerSession = new ArrayList<>();
+    //public List<User> buildHammerSession = new ArrayList<>();
 
     public EventManager(Main plugin) {
         this.plugin = plugin;
@@ -30,7 +26,7 @@ public class EventManager implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         User user = plugin.getDatabaseManager().getUser(event.getPlayer());
-        if(event.getClickedBlock()==null){
+        if (event.getClickedBlock() == null) {
             return;
         }
         CubBoard cubBoard = plugin.getDatabaseManager().getCupBoard(new PluginLocation(event.getClickedBlock().getLocation()));
@@ -75,6 +71,10 @@ public class EventManager implements Listener {
             return;
         }
 
+        if (!event.canBuild()) {
+            return;
+        }
+
         Item item = new Item(event.getItemInHand());
 
         if (!item.equals(plugin.config.cubBoardItem, false)) {
@@ -102,7 +102,7 @@ public class EventManager implements Listener {
     }
 
     @EventHandler
-    public void onBuildHammerUse(PlayerInteractEvent event){
+    public void onBuildHammerUse(PlayerInteractEvent event) {
         User user = plugin.databaseManager.getUser(event.getPlayer());
         Item item = new Item(event.getItem());
 
@@ -110,20 +110,22 @@ public class EventManager implements Listener {
             return;
         }
 
+        /*
         if (buildHammerSession.contains(user)) {
             buildHammerSession.remove(user);
-            System.out.println("Removing user from build hammer session");
             return;
         }
 
         buildHammerSession.add(user);
-        System.out.println("Adding user to build hammer session");
+        */
     }
 
+    /*
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
         User user = plugin.databaseManager.getUser(event.getPlayer());
         buildHammerSession.remove(user);
     }
+    */
 
 }

@@ -1,15 +1,16 @@
 package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.databases.User;
+import dev.lightdream.api.files.dto.Item;
 import dev.lightdream.api.files.dto.PluginLocation;
 import dev.lightdream.api.utils.Utils;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.CubBoard;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import xyz.xenondevs.particle.ParticleBuilder;
 import xyz.xenondevs.particle.ParticleEffect;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 
@@ -25,14 +26,22 @@ public class ScheduleManager {
     @SuppressWarnings("ConstantConditions")
     private void registerBuildHammerPreview() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
-            for (User user : plugin.eventManager.buildHammerSession) {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if (!new Item(player.getItemInHand()).equals(plugin.config.buildHammerItem, false)) {
+                    return;
+                }
+
+                User user = Main.instance.databaseManager.getUser(player);
                 if (!user.isOnline()) {
-                    continue;
+                    return;
                 }
+
                 CubBoard cubBoard = plugin.databaseManager.getCupBoard(user.getLocation());
+
                 if (cubBoard == null) {
-                    continue;
+                    return;
                 }
+
                 List<PluginLocation> corners = cubBoard.getProtectionRange().getCorners();
 
                 HashSet<PluginLocation> effects = new HashSet<>();
@@ -66,12 +75,14 @@ public class ScheduleManager {
                     }
                 }
 
-                Player player = user.getPlayer();
-                effects.forEach(p -> new ParticleBuilder(ParticleEffect.FLAME, p.toLocation())
+                Color effectColor = cubBoard.owners.contains(user.id) ? Color.GREEN : Color.RED;
+
+                effects.forEach(p -> new ParticleBuilder(ParticleEffect.REDSTONE, p.newOffset(0.5, 0.5, 0.5).toLocation())
                         .setOffsetY(1f)
-                        .setSpeed(0.1f)
+                        .setSpeed(0.02f)
+                        .setColor(effectColor)
                         .display(player));
-            }
+            });
         }, 0, plugin.config.buildHammerPreviewScheduleTimer);
     }
 

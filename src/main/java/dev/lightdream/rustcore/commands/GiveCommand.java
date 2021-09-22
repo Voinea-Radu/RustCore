@@ -39,7 +39,7 @@ public class GiveCommand extends SubCommand {
         }
 
         switch (item){
-            case "cubbaord":
+            case "cubboard":
                 target.getPlayer().getInventory().addItem(ItemBuilder.makeItem(Main.instance.config.cubBoardItem));
                 break;
             case "buildhammer":
