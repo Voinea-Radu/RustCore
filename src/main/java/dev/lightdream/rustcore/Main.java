@@ -5,11 +5,12 @@ import dev.lightdream.api.LightDreamPlugin;
 import dev.lightdream.api.databases.User;
 import dev.lightdream.api.files.config.SQLConfig;
 import dev.lightdream.api.managers.MessageManager;
-import dev.lightdream.rustcore.commands.GiveCubBoard;
+import dev.lightdream.rustcore.commands.GiveCommand;
 import dev.lightdream.rustcore.config.Config;
 import dev.lightdream.rustcore.config.Lang;
 import dev.lightdream.rustcore.managers.DatabaseManager;
 import dev.lightdream.rustcore.managers.EventManager;
+import dev.lightdream.rustcore.managers.ScheduleManager;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -26,13 +27,15 @@ public final class Main extends LightDreamPlugin {
 
     //Managers
     public DatabaseManager databaseManager;
+    public EventManager eventManager;
 
     @Override
     public void onEnable() {
         init("RustCore", "rc", "1.0");
         instance = this;
         databaseManager = new DatabaseManager(this);
-        new EventManager(this);
+        eventManager =  new EventManager(this);
+        new ScheduleManager(this);
     }
 
 
@@ -62,7 +65,7 @@ public final class Main extends LightDreamPlugin {
 
     @Override
     public void loadBaseCommands() {
-        baseSubCommands.add(new GiveCubBoard(this));
+        baseSubCommands.add(new GiveCommand(this));
     }
 
     @Override

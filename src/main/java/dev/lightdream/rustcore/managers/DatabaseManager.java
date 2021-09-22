@@ -17,6 +17,9 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
     }
 
     public CubBoard getCupBoard(PluginLocation location, boolean exact) {
+        if (location == null) {
+            return null;
+        }
         if (exact) {
             return getAll(CubBoard.class).stream().filter(cubBoard -> cubBoard.location.equals(location)).findFirst().orElse(null);
         }
