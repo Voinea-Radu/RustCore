@@ -1,7 +1,10 @@
 package dev.lightdream.rustcore.config;
 
-public class Lang extends dev.lightdream.api.files.config.Lang {
+public class Lang extends dev.lightdream.api.conifgs.Lang {
 
     public String invalidItem = "This is not a valid item";
+    public String invalidCubBoard = "This is not a valid cub board";
+    public String cannotRemoveFounder = "You cannot remove the founder";
+    public String notFounder = "You are not the founder";
 
 }

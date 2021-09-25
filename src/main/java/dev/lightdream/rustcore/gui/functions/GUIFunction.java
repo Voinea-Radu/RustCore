@@ -1,10 +1,11 @@
 package dev.lightdream.rustcore.gui.functions;
 
-import com.google.gson.JsonElement;
 import dev.lightdream.api.databases.User;
+import dev.lightdream.api.gui.GUI;
+import dev.lightdream.api.utils.MessageBuilder;
 
 public interface GUIFunction {
 
-    void execute(User user, JsonElement args);
+    void execute(GUI gui, User user, MessageBuilder args);
 
 }

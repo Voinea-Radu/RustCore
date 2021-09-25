@@ -1,8 +1,8 @@
 package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.databases.User;
-import dev.lightdream.api.files.dto.Item;
-import dev.lightdream.api.files.dto.PluginLocation;
+import dev.lightdream.api.dto.Item;
+import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.CubBoard;
 import dev.lightdream.rustcore.gui.CubBoardGUI;
@@ -16,29 +16,33 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class EventManager implements Listener {
 
     private final Main plugin;
-    //public List<User> buildHammerSession = new ArrayList<>();
 
     public EventManager(Main plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         User user = plugin.getDatabaseManager().getUser(event.getPlayer());
         if (event.getClickedBlock() == null) {
             return;
         }
+
         CubBoard cubBoard = plugin.getDatabaseManager().getCupBoard(new PluginLocation(event.getClickedBlock().getLocation()));
+
         if (cubBoard == null) {
             return;
         }
-        if (!cubBoard.owners.contains(user)) {
+
+        if (!cubBoard.owners.contains(user.id)) {
             event.setCancelled(true);
             return;
         }
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         User user = plugin.getDatabaseManager().getUser(event.getPlayer());
@@ -46,12 +50,13 @@ public class EventManager implements Listener {
         if (cubBoard == null) {
             return;
         }
-        if (!cubBoard.owners.contains(user)) {
+        if (!cubBoard.owners.contains(user.id)) {
             event.setCancelled(true);
             return;
         }
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event) {
         User user = plugin.getDatabaseManager().getUser(event.getPlayer());
@@ -59,14 +64,17 @@ public class EventManager implements Listener {
         if (cubBoard == null) {
             return;
         }
-        if (!cubBoard.owners.contains(user)) {
+        if (!cubBoard.owners.contains(user.id)) {
             event.setCancelled(true);
             return;
         }
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCupBoardPlace(BlockPlaceEvent event) {
+        User user = plugin.databaseManager.getUser(event.getPlayer());
+
         if (event.isCancelled()) {
             return;
         }
@@ -81,7 +89,7 @@ public class EventManager implements Listener {
             return;
         }
 
-        if (!new CubBoard(new PluginLocation(event.getBlock().getLocation())).created) {
+        if (!new CubBoard(new PluginLocation(event.getBlock().getLocation()), user).created) {
             event.setCancelled(true);
             return;
         }
@@ -94,38 +102,30 @@ public class EventManager implements Listener {
         if (event.getClickedBlock() == null) {
             return;
         }
+
         CubBoard cubBoard = plugin.databaseManager.getCupBoard(new PluginLocation(event.getClickedBlock().getLocation()), true);
+
         if (cubBoard == null) {
             return;
         }
+
+        event.setCancelled(true);
+
+        if (!cubBoard.owners.contains(user.id)) {
+            return;
+        }
+
         new CubBoardGUI(plugin, cubBoard).open(user);
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     @EventHandler
     public void onBuildHammerUse(PlayerInteractEvent event) {
-        User user = plugin.databaseManager.getUser(event.getPlayer());
         Item item = new Item(event.getItem());
 
         if (!item.equals(plugin.config.buildHammerItem, false)) {
             return;
         }
-
-        /*
-        if (buildHammerSession.contains(user)) {
-            buildHammerSession.remove(user);
-            return;
-        }
-
-        buildHammerSession.add(user);
-        */
     }
-
-    /*
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent event){
-        User user = plugin.databaseManager.getUser(event.getPlayer());
-        buildHammerSession.remove(user);
-    }
-    */
 
 }

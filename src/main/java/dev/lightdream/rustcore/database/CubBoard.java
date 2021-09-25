@@ -1,30 +1,37 @@
 package dev.lightdream.rustcore.database;
 
-import dev.lightdream.api.files.dto.LocationRange;
-import dev.lightdream.api.files.dto.PluginLocation;
+import dev.lightdream.api.databases.Savable;
+import dev.lightdream.api.databases.User;
+import dev.lightdream.api.dto.LocationRange;
+import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.libs.j256.field.DataType;
 import dev.lightdream.libs.j256.field.DatabaseField;
 import dev.lightdream.libs.j256.table.DatabaseTable;
 import dev.lightdream.rustcore.Main;
-import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 
 @DatabaseTable(tableName = "cupboards")
-@NoArgsConstructor
-public class CubBoard {
+public class CubBoard extends Savable {
 
+    @SuppressWarnings("unused")
     @DatabaseField(columnName = "id", generatedId = true, canBeNull = false)
     public int id;
+    @DatabaseField(columnName = "founder", foreign = true)
+    public User founder;
     @DatabaseField(columnName = "owners", dataType = DataType.SERIALIZABLE)
     public HashSet<Integer> owners;
     @DatabaseField(columnName = "location", dataType = DataType.SERIALIZABLE)
     public PluginLocation location;
     public boolean created;
 
-    public CubBoard(PluginLocation location) {
+    public CubBoard(PluginLocation location, User founder) {
+        super(Main.instance);
+
         this.owners = new HashSet<>();
+        this.owners.add(founder.id);
         this.location = location;
+        this.founder = founder;
 
         for (PluginLocation corner : getProtectionRange().getCorners()) {
             if (Main.instance.databaseManager.getCupBoard(corner) != null) {
@@ -34,7 +41,12 @@ public class CubBoard {
         }
 
         this.created = true;
-        Main.instance.getDatabaseManager().save(this);
+        save();
+    }
+
+    @SuppressWarnings("unused")
+    public CubBoard() {
+        super(Main.instance);
     }
 
     public LocationRange getProtectionRange() {
@@ -46,4 +58,17 @@ public class CubBoard {
 
         return new LocationRange(p1, p2);
     }
+
+    @SuppressWarnings("unused")
+    public void addOwner(User user) {
+        owners.add(user.id);
+        save();
+    }
+
+    @SuppressWarnings("unused")
+    public void removeOwner(User user) {
+        owners.remove(user.id);
+        save();
+    }
+
 }

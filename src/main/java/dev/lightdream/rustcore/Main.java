@@ -2,8 +2,8 @@ package dev.lightdream.rustcore;
 
 import dev.lightdream.api.API;
 import dev.lightdream.api.LightDreamPlugin;
+import dev.lightdream.api.conifgs.SQLConfig;
 import dev.lightdream.api.databases.User;
-import dev.lightdream.api.files.config.SQLConfig;
 import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.commands.GiveCommand;
 import dev.lightdream.rustcore.config.Config;
@@ -34,7 +34,7 @@ public final class Main extends LightDreamPlugin {
         init("RustCore", "rc", "1.0");
         instance = this;
         databaseManager = new DatabaseManager(this);
-        eventManager =  new EventManager(this);
+        eventManager = new EventManager(this);
         new ScheduleManager(this);
     }
 

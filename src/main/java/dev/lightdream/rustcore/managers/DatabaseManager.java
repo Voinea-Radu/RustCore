@@ -2,7 +2,7 @@ package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.databases.User;
-import dev.lightdream.api.files.dto.PluginLocation;
+import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.rustcore.database.CubBoard;
 
 public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager {
