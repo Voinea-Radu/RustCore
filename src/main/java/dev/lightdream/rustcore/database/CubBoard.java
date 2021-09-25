@@ -17,21 +17,17 @@ public class CubBoard extends Savable {
     @SuppressWarnings("unused")
     @DatabaseField(columnName = "id", generatedId = true, canBeNull = false)
     public int id;
-    @DatabaseField(columnName = "founder", foreign = true)
-    public User founder;
     @DatabaseField(columnName = "owners", dataType = DataType.SERIALIZABLE)
     public HashSet<Integer> owners;
     @DatabaseField(columnName = "location", dataType = DataType.SERIALIZABLE)
     public PluginLocation location;
     public boolean created;
 
-    public CubBoard(PluginLocation location, User founder) {
+    public CubBoard(PluginLocation location) {
         super(Main.instance);
 
         this.owners = new HashSet<>();
-        this.owners.add(founder.id);
         this.location = location;
-        this.founder = founder;
 
         for (PluginLocation corner : getProtectionRange().getCorners()) {
             if (Main.instance.databaseManager.getCupBoard(corner) != null) {

@@ -73,8 +73,6 @@ public class EventManager implements Listener {
     @SuppressWarnings("UnnecessaryReturnStatement")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCupBoardPlace(BlockPlaceEvent event) {
-        User user = plugin.databaseManager.getUser(event.getPlayer());
-
         if (event.isCancelled()) {
             return;
         }
@@ -89,7 +87,7 @@ public class EventManager implements Listener {
             return;
         }
 
-        if (!new CubBoard(new PluginLocation(event.getBlock().getLocation()), user).created) {
+        if (!new CubBoard(new PluginLocation(event.getBlock().getLocation())).created) {
             event.setCancelled(true);
             return;
         }
@@ -110,11 +108,7 @@ public class EventManager implements Listener {
         }
 
         event.setCancelled(true);
-
-        if (!cubBoard.owners.contains(user.id)) {
-            return;
-        }
-
+        cubBoard.addOwner(user);
         new CubBoardGUI(plugin, cubBoard).open(user);
     }
 

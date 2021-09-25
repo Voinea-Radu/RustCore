@@ -32,16 +32,6 @@ public class RemovePlayer implements GUIFunction {
             return;
         }
 
-        if(!cubBoard.founder.equals(user)){
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notFounder);
-            return;
-        }
-
-        if(cubBoard.founder.equals(target)){
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.cannotRemoveFounder);
-            return;
-        }
-
         cubBoard.removeOwner(target);
         GUIFunctions.OPEN_GUI.function.execute(gui, user, new MessageBuilder("cub_board_players"));
     }
