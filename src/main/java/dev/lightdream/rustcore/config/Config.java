@@ -26,15 +26,40 @@ public class Config extends dev.lightdream.api.conifgs.Config {
                         "You need the next to upkeep the cub board for one hour",
                         "10x WOOD",
                         "5x COBBLESTONE",
+                        "3x IRON",
                         "2x DIAMOND",
-                        "1x EMERALD",
-                        "3x IRON")),
+                        "1x EMERALD")),
                         new GUIItem.GUIItemArgs()));
                 put("players", new GUIItem(new Item(XMaterial.PLAYER_HEAD, 10, 1, "Players List", Arrays.asList(
                         "Click to view and edit")),
                         new GUIItem.GUIItemArgs(new HashMap<Object, Object>() {{
                             put("open_gui", "cub_board_players");
                         }})));
+                put("wood", new GUIItem(new Item(XMaterial.OAK_LOG, 38, 1, "Wood", Arrays.asList(
+                        "Currently have: %wood_current_amount%"
+                ), new HashMap<String, Object>(){{
+                    put("usable", false);
+                }}), new GUIItem.GUIItemArgs()));
+                put("cobblestone", new GUIItem(new Item(XMaterial.COBBLESTONE, 39, 1, "Cobblestone", Arrays.asList(
+                        "Currently have: %cobblestone_current_amount%"
+                ), new HashMap<String, Object>(){{
+                    put("usable", false);
+                }}), new GUIItem.GUIItemArgs()));
+                put("iron", new GUIItem(new Item(XMaterial.IRON_INGOT, 40, 1, "Iron", Arrays.asList(
+                        "Currently have: %iron_current_amount%"
+                ), new HashMap<String, Object>(){{
+                    put("usable", false);
+                }}), new GUIItem.GUIItemArgs()));
+                put("diamond", new GUIItem(new Item(XMaterial.DIAMOND, 41, 1, "Diamond", Arrays.asList(
+                        "Currently have: %diamond_current_amount%"
+                ), new HashMap<String, Object>(){{
+                    put("usable", false);
+                }}), new GUIItem.GUIItemArgs()));
+                put("emerald", new GUIItem(new Item(XMaterial.EMERALD, 42, 1, "Emerald", Arrays.asList(
+                        "Currently have: %emerald_current_amount%"
+                ), new HashMap<String, Object>(){{
+                    put("usable", false);
+                }}), new GUIItem.GUIItemArgs()));
             }});
     public GUIConfig cubBoardPlayersGUI = new GUIConfig(
             "cub_board_players_gui",
@@ -53,5 +78,11 @@ public class Config extends dev.lightdream.api.conifgs.Config {
 
     public int buildHammerPreviewScheduleTimer = 20;
     public int maxCubBoardMembers = 18;
+    public long processCubBoardTime = 160 * 60 * 1000L;
+    public int processWoodAmount = 5;
+    public int processCobblestoneAmount = 4;
+    public int processIronAmount = 3;
+    public int processDiamondAmount = 2;
+    public int processEmeraldAmount = 1;
 
 }

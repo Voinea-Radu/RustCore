@@ -17,6 +17,8 @@ public class OpenGUI implements GUIFunction {
             return;
         }
 
+        System.out.println(args);
+
         switch (args) {
             case "cub_board":
                 new CubBoardGUI(Main.instance, (CubBoard) gui.getArgs().get(CubBoard.class)).open(user);

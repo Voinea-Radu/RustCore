@@ -21,6 +21,7 @@ public class ScheduleManager {
     public ScheduleManager(Main plugin) {
         this.plugin = plugin;
         registerBuildHammerPreview();
+        registerCubBoardProcess();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -82,6 +83,12 @@ public class ScheduleManager {
                     .setColor(effectColor)
                     .display(player));
         }), 0, plugin.config.buildHammerPreviewScheduleTimer);
+    }
+
+    private void registerCubBoardProcess() {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+            plugin.databaseManager.getAllIDs(CubBoard.class).forEach(id -> plugin.databaseManager.getCubBoard(id).process());
+        }, 0, 60 * 20);
     }
 
 }

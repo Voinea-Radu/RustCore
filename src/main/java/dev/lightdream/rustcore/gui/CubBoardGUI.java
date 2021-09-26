@@ -28,6 +28,11 @@ public class CubBoardGUI extends GUI {
         User user = Main.instance.databaseManager.getUser(player);
         return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
             put("player_name", user.name);
+            put("wood_current_amount", String.valueOf(cubBoard.wood));
+            put("cobblestone_current_amount", String.valueOf(cubBoard.cobblestone));
+            put("iron_current_amount", String.valueOf(cubBoard.iron));
+            put("diamond_current_amount", String.valueOf(cubBoard.diamond));
+            put("emerald_current_amount", String.valueOf(cubBoard.emerald));
         }}).parseString();
     }
 

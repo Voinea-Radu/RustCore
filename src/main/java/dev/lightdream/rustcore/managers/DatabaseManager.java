@@ -25,4 +25,8 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         }
         return getAll(CubBoard.class).stream().filter(cubBoard -> cubBoard.getProtectionRange().check(location)).findFirst().orElse(null);
     }
+
+    public CubBoard getCubBoard(Integer id){
+        return getAll(CubBoard.class).stream().filter(cubBoard -> cubBoard.id==id).findFirst().orElse(null);
+    }
 }
