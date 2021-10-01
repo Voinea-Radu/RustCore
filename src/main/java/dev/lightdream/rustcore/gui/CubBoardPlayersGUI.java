@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CubBoardPlayersGUI extends GUI {
 
@@ -35,10 +36,13 @@ public class CubBoardPlayersGUI extends GUI {
             return s;
         }
 
-        return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
+        String output = new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
             put("player_name", user.name);
             put("target_player_name", target.name);
         }}).parseString();
+
+        System.out.println(s + " -> " + output);
+        return output;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class CubBoardPlayersGUI extends GUI {
     }
 
     @Override
-    public void functionCall(Player player, String function, MessageBuilder args) {
+    public void functionCall(Player player, String function, List<String> args) {
         GUIFunctions.valueOf(function.toUpperCase()).function.execute(this, Main.instance.databaseManager.getUser(player), args);
     }
 

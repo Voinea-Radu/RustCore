@@ -20,7 +20,7 @@ public class GiveCommand extends SubCommand {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void execute(CommandSender commandSender, List<String> args) {
-        if(args.size()!=2){
+        if (args.size() != 2) {
             sendUsage(commandSender);
             return;
         }
@@ -28,17 +28,17 @@ public class GiveCommand extends SubCommand {
         String item = args.get(0).toLowerCase();
         User target = Main.instance.databaseManager.getUser(args.get(1));
 
-        if(target==null){
+        if (target == null) {
             api.getMessageManager().sendMessage(commandSender, Main.instance.lang.invalidUser);
             return;
         }
 
-        if(!target.isOnline()){
+        if (!target.isOnline()) {
             api.getMessageManager().sendMessage(commandSender, Main.instance.lang.offlineUser);
             return;
         }
 
-        switch (item){
+        switch (item) {
             case "cubboard":
                 target.getPlayer().getInventory().addItem(ItemBuilder.makeItem(Main.instance.config.cubBoardItem));
                 break;
@@ -53,7 +53,7 @@ public class GiveCommand extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, List<String> args) {
-        if(args.size()==1){
+        if (args.size() == 1) {
             return Arrays.asList("CubBoard", "BuildHammer");
         }
         return null;

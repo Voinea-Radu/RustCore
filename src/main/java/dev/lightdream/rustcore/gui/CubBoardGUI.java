@@ -13,6 +13,7 @@ import fr.minuskube.inv.content.InventoryProvider;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class CubBoardGUI extends GUI {
 
@@ -47,7 +48,7 @@ public class CubBoardGUI extends GUI {
     }
 
     @Override
-    public void functionCall(Player player, String function, MessageBuilder args) {
+    public void functionCall(Player player, String function, List<String> args) {
         GUIFunctions.valueOf(function.toUpperCase()).function.execute(this, Main.instance.databaseManager.getUser(player), args);
     }
 
