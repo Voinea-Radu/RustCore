@@ -93,7 +93,6 @@ public class CubBoard extends EditableDatabaseEntry {
     }
 
     public void process() {
-        System.out.println("Processing cub board with id " + this.id);
         if (System.currentTimeMillis() - this.lastProcessTime >= Main.instance.config.processCubBoardTime) {
             return;
         }

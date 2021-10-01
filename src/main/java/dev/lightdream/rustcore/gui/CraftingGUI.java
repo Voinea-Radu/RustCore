@@ -25,7 +25,7 @@ public class CraftingGUI extends GUI {
         super(api);
         this.category = category;
 
-        switch (category){
+        switch (category) {
             case "crafting_general":
                 this.recipes = Main.instance.config.generalRecipes;
                 break;
@@ -69,7 +69,7 @@ public class CraftingGUI extends GUI {
             recipe.description.add("");
         }
 
-        String output = new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
+        return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
             put("recipe_name", recipe.name);
             put("recipe_duration", String.valueOf(recipe.time));
             put("recipe_description_1", recipe.description.get(0));
@@ -85,7 +85,6 @@ public class CraftingGUI extends GUI {
             put("recipe_id", recipe.id);
             put("material", recipe.result.material.parseMaterial().name());
         }}).parseString();
-        return output;
     }
 
     @Override

@@ -36,13 +36,10 @@ public class CubBoardPlayersGUI extends GUI {
             return s;
         }
 
-        String output = new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
+        return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
             put("player_name", user.name);
             put("target_player_name", target.name);
         }}).parseString();
-
-        System.out.println(s + " -> " + output);
-        return output;
     }
 
     @Override

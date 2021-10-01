@@ -13,7 +13,6 @@ public class CraftRecipe extends GUIFunction {
         if (recipeId == null) {
             return;
         }
-        System.out.println("Adding recipe " + recipeId + " to user " + user.id);
         user.addRecipe(recipeId);
     }
 }

@@ -1,7 +1,6 @@
 package dev.lightdream.rustcore.gui.functions.functions;
 
 import dev.lightdream.api.gui.GUI;
-import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.CubBoard;
 import dev.lightdream.rustcore.database.User;

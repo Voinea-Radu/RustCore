@@ -15,7 +15,6 @@ public class RemovePlayer extends GUIFunction {
         String targetName = args.get(0);
 
         if (targetName == null) {
-            System.out.println(1);
             Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
             return;
         }
@@ -23,7 +22,6 @@ public class RemovePlayer extends GUIFunction {
         User target = Main.instance.databaseManager.getUser(targetName);
 
         if (target == null) {
-            System.out.println(2);
             Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
             return;
         }

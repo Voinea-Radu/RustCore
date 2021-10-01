@@ -53,10 +53,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
 
     @SuppressWarnings("unused")
     public @Nullable User getUser(@NotNull String name) {
-        System.out.println(getAll(User.class));
-        System.out.println(name);
         Optional<User> optionalUser = getAll(User.class).stream().filter(user -> user.name.equals(name)).findFirst();
-        System.out.println(optionalUser.orElse(null));
         return optionalUser.orElse(null);
     }
 
