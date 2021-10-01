@@ -7,6 +7,7 @@ import dev.lightdream.rustcore.dto.Recipe;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,16 +38,27 @@ public class User extends dev.lightdream.api.databases.User {
     }
 
     public void addRecipe(String recipeID) {
-        for (Recipe generalRecipe : Main.instance.config.generalRecipes) {
-            if (generalRecipe.id.equals(recipeID)) {
-                addRecipe(generalRecipe);
-                return;
+        List<List<Recipe>> recipes = Arrays.asList(
+                Main.instance.config.generalRecipes,
+                Main.instance.config.foodRecipes,
+                Main.instance.config.toolsRecipes,
+                Main.instance.config.armourRecipes,
+                Main.instance.config.battleRecipes,
+                Main.instance.config.rareRecipes
+        );
+
+        for (List<Recipe> recipe : recipes) {
+            for (Recipe generalRecipe : recipe) {
+                if (generalRecipe.id.equals(recipeID)) {
+                    addRecipe(generalRecipe);
+                    return;
+                }
             }
         }
     }
 
     public void addRecipe(Recipe recipe) {
-        if(!recipe.take(this)){
+        if (!recipe.take(this)) {
             return;
         }
         this.activeRecipes.add(recipe);

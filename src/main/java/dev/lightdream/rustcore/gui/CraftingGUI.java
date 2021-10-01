@@ -23,19 +23,35 @@ public class CraftingGUI extends GUI {
 
     public CraftingGUI(IAPI api, String category) {
         super(api);
-        if (category.equals("general")) {
-            this.recipes = Main.instance.config.generalRecipes;
-        } else {
-            this.recipes = new ArrayList<>();
-        }
         this.category = category;
-        //System.out.println("Recipes size "+this.recipes.size());
+
+        switch (category){
+            case "crafting_general":
+                this.recipes = Main.instance.config.generalRecipes;
+                break;
+            case "crafting_food":
+                this.recipes = Main.instance.config.foodRecipes;
+                break;
+            case "crafting_battle":
+                this.recipes = Main.instance.config.battleRecipes;
+                break;
+            case "crafting_armour":
+                this.recipes = Main.instance.config.armourRecipes;
+                break;
+            case "crafting_tools":
+                this.recipes = Main.instance.config.toolsRecipes;
+                break;
+            case "crafting_rare":
+                this.recipes = Main.instance.config.rareRecipes;
+                break;
+            default:
+                this.recipes = new ArrayList<>();
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public String parse(String s, Player player) {
-        //System.out.println("Index " + index);
 
         if (index < 0) {
             return s;

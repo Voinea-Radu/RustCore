@@ -64,6 +64,7 @@ public class Config extends dev.lightdream.api.conifgs.Config {
                     put("usable", false);
                 }}), new GUIItem.GUIItemArgs()));
             }});
+
     public GUIConfig cubBoardPlayersGUI = new GUIConfig(
             "cub_board_players_gui",
             "CHEST",
@@ -86,9 +87,29 @@ public class Config extends dev.lightdream.api.conifgs.Config {
             6,
             new Item(XMaterial.GRAY_STAINED_GLASS_PANE, ""),
             new HashMap<String, GUIItem>() {{
-                put("crafting", new GUIItem(new Item(XMaterial.SPONGE, 10, 1, "General", new ArrayList<>()),
+                put("crafting_general", new GUIItem(new Item(XMaterial.SPONGE, 10, 1, "General", new ArrayList<>()),
                         new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
                             put("open_gui", "crafting_general");
+                        }})));
+                put("crafting_food", new GUIItem(new Item(XMaterial.BREAD, 11, 1, "General", new ArrayList<>()),
+                        new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
+                            put("open_gui", "crafting_food");
+                        }})));
+                put("crafting_battle", new GUIItem(new Item(XMaterial.IRON_SWORD, 12, 1, "General", new ArrayList<>()),
+                        new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
+                            put("open_gui", "crafting_battle");
+                        }})));
+                put("crafting_armour", new GUIItem(new Item(XMaterial.IRON_HELMET, 19, 1, "General", new ArrayList<>()),
+                        new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
+                            put("open_gui", "crafting_armour");
+                        }})));
+                put("crafting_tools", new GUIItem(new Item(XMaterial.IRON_PICKAXE, 20, 1, "General", new ArrayList<>()),
+                        new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
+                            put("open_gui", "crafting_tools");
+                        }})));
+                put("crafting_rare", new GUIItem(new Item(XMaterial.BLAZE_POWDER, 21, 1, "General", new ArrayList<>()),
+                        new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
+                            put("open_gui", "crafting_rare");
                         }})));
                 put("recipe", new GUIItem(new Item(XMaterial.PLACEHOLDER, 1, "%recipe_name%", Arrays.asList(
                         "%recipe_description_1%",
@@ -117,6 +138,12 @@ public class Config extends dev.lightdream.api.conifgs.Config {
                     "DurationL: %recipe_duration%s"
             ))
     );
+
+    public List<Recipe> foodRecipes = new ArrayList<>();
+    public List<Recipe> battleRecipes = new ArrayList<>();
+    public List<Recipe> armourRecipes = new ArrayList<>();
+    public List<Recipe> toolsRecipes = new ArrayList<>();
+    public List<Recipe> rareRecipes = new ArrayList<>();
 
     public int buildHammerPreviewScheduleTimer = 20;
     public int maxCubBoardMembers = 18;
