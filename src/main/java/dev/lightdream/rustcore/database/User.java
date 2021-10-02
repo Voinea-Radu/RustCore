@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor
 public class User extends dev.lightdream.api.databases.User {
@@ -70,7 +71,21 @@ public class User extends dev.lightdream.api.databases.User {
         sb.send(getPlayer());
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void addRecipe(String recipeID) {
+
+        AtomicInteger max = new AtomicInteger();
+
+        Main.instance.config.maxNumberOfCrafts.forEach((perm, number) -> {
+            if (getPlayer().hasPermission(perm)) {
+                max.set(Math.max(max.get(), number));
+            }
+        });
+
+        if (activeRecipes.size() >= max.get()) {
+            return;
+        }
+
         List<List<Recipe>> recipes = Arrays.asList(
                 Main.instance.config.generalRecipes,
                 Main.instance.config.foodRecipes,

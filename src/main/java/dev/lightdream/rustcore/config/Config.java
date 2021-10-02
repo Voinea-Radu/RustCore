@@ -4,6 +4,7 @@ import dev.lightdream.api.dto.GUIConfig;
 import dev.lightdream.api.dto.GUIItem;
 import dev.lightdream.api.dto.Item;
 import dev.lightdream.api.dto.XMaterial;
+import dev.lightdream.libs.j256.stmt.query.In;
 import dev.lightdream.rustcore.dto.Recipe;
 
 import java.util.ArrayList;
@@ -153,5 +154,11 @@ public class Config extends dev.lightdream.api.conifgs.Config {
     public int processIronAmount = 3;
     public int processDiamondAmount = 2;
     public int processEmeraldAmount = 1;
+
+    public HashMap<String, Integer> maxNumberOfCrafts = new HashMap<String, Integer>(){{
+        put("rc.crafting.3", 3);
+        put("rc.crafting.5", 5);
+        put("rc.crafting.6", 6);
+    }};
 
 }
