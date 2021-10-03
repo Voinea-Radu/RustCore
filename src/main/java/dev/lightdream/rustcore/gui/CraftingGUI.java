@@ -8,8 +8,11 @@ import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.dto.Recipe;
 import dev.lightdream.rustcore.gui.functions.GUIFunctions;
+import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,5 +122,30 @@ public class CraftingGUI extends GUI {
         return new HashMap<Class<?>, Object>() {{
             put(String.class, category);
         }};
+    }
+
+    @Override
+    public void setItems(Player player, InventoryContents inventoryContents) {
+
+    }
+
+    @Override
+    public void beforeUpdate(Player player, InventoryContents inventoryContents) {
+
+    }
+
+    @Override
+    public void onInventoryClose(InventoryCloseEvent inventoryCloseEvent) {
+
+    }
+
+    @Override
+    public void onInventoryClick(InventoryClickEvent inventoryClickEvent) {
+
+    }
+
+    @Override
+    public void onPlayerInventoryClick(InventoryClickEvent inventoryClickEvent) {
+
     }
 }

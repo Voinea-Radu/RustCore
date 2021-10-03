@@ -4,8 +4,10 @@ import dev.lightdream.api.dto.GUIConfig;
 import dev.lightdream.api.dto.GUIItem;
 import dev.lightdream.api.dto.Item;
 import dev.lightdream.api.dto.XMaterial;
-import dev.lightdream.libs.j256.stmt.query.In;
+import dev.lightdream.rustcore.dto.Enchant;
 import dev.lightdream.rustcore.dto.Recipe;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
-public class Config extends dev.lightdream.api.conifgs.Config {
+public class Config extends dev.lightdream.api.configs.Config {
 
     public int cubBoardProtectionRadius = 20;
     public Item cubBoardItem = new Item(XMaterial.SPONGE, 1, "CupBoard", Arrays.asList("Place to create a 40x40 area of protection"));
@@ -64,7 +66,9 @@ public class Config extends dev.lightdream.api.conifgs.Config {
                 ), new HashMap<String, Object>() {{
                     put("usable", false);
                 }}), new GUIItem.GUIItemArgs()));
-            }});
+            }},
+            false
+    );
 
     public GUIConfig cubBoardPlayersGUI = new GUIConfig(
             "cub_board_players_gui",
@@ -78,7 +82,7 @@ public class Config extends dev.lightdream.api.conifgs.Config {
                 )), new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
                     put("remove_player", "%target_player_name%");
                 }}), Arrays.asList(20, 21, 22, 23, 24, 29, 30, 31, 32, 33, 38, 39, 40, 41, 42, 48, 49, 50)));
-            }}
+            }}, false
     );
 
     public GUIConfig craftingGUI = new GUIConfig(
@@ -125,7 +129,8 @@ public class Config extends dev.lightdream.api.conifgs.Config {
                 )), new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
                     put("craft_recipe", "%recipe_id%");
                 }}), Arrays.asList(14, 15, 16, 23, 24, 25, 32, 33, 34, 41, 42, 43)));
-            }}
+            }},
+            false
     );
 
     public List<Recipe> generalRecipes = Arrays.asList(
@@ -155,10 +160,58 @@ public class Config extends dev.lightdream.api.conifgs.Config {
     public int processDiamondAmount = 2;
     public int processEmeraldAmount = 1;
 
-    public HashMap<String, Integer> maxNumberOfCrafts = new HashMap<String, Integer>(){{
+    public HashMap<String, Integer> maxNumberOfCrafts = new HashMap<String, Integer>() {{
         put("rc.crafting.3", 3);
         put("rc.crafting.5", 5);
         put("rc.crafting.6", 6);
+    }};
+
+    public int enchantingItemPosition = 13;
+
+    public GUIConfig enchantingGUI = new GUIConfig(
+            "enchanting_gui",
+            "CHEST",
+            "Enchanting",
+            6,
+            new Item(XMaterial.GRAY_STAINED_GLASS_PANE, ""),
+            new HashMap<String, GUIItem>() {{
+                put("enchant", new GUIItem(new Item(XMaterial.ENCHANTED_BOOK, 1, "%enchant_name%", new ArrayList<>()),
+                        new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
+                            put("open_gui_with_args", Arrays.asList("enchanting_category_gui", "%enchant_id%"));
+                        }}), Arrays.asList(38, 39, 40, 41, 42, 47, 48, 49, 50, 51)));
+            }},
+            false
+    );
+
+    public GUIConfig enchantingCategoryGUI = new GUIConfig(
+            "enchanting_category_gui",
+            "CHEST",
+            "Enchanting",
+            6,
+            new Item(XMaterial.GRAY_STAINED_GLASS_PANE, ""),
+            new HashMap<String, GUIItem>() {{
+                put("enchant", new GUIItem(new Item(XMaterial.ENCHANTED_BOOK, 1, "%enchant_name% %enchant_level%", new ArrayList<>()),
+                        new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
+                            put("enchant_item", Arrays.asList("%enchant_id%", "%enchant_level%"));
+                        }}), Arrays.asList(38, 39, 40, 41, 42, 47, 48, 49, 50, 51)));
+            }},
+            false
+    );
+
+    public List<Enchant> enchantsList = Arrays.asList(
+            new Enchant(Enchantment.PROTECTION_ENVIRONMENTAL.getName(), "Protection", new HashMap<Integer, Integer>() {{
+                put(1, 1);
+                put(2, 2);
+                put(3, 3);
+                put(4, 4);
+                put(5, 5);
+            }})
+    );
+
+    public HashMap<EnchantmentTarget, List<String>> enchants = new HashMap<EnchantmentTarget, List<String>>() {{
+        put(EnchantmentTarget.ARMOR, Arrays.asList(
+                Enchantment.PROTECTION_ENVIRONMENTAL.getName()
+        ));
     }};
 
 }

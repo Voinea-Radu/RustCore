@@ -7,6 +7,7 @@ import dev.lightdream.rustcore.database.User;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,6 +72,10 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         Optional<User> optionalUser = getAll(User.class).stream().filter(user -> user.id == id).findFirst();
 
         return optionalUser.orElse(null);
+    }
+
+    public @NotNull User getUser(@NotNull HumanEntity entity){
+        return getUser((Player) entity);
     }
 
     @SuppressWarnings("unused")

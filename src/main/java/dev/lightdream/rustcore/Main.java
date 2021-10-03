@@ -2,7 +2,7 @@ package dev.lightdream.rustcore;
 
 import dev.lightdream.api.API;
 import dev.lightdream.api.LightDreamPlugin;
-import dev.lightdream.api.conifgs.SQLConfig;
+import dev.lightdream.api.configs.SQLConfig;
 import dev.lightdream.api.databases.User;
 import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.commands.GiveCommand;

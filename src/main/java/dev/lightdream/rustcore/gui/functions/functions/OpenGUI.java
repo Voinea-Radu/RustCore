@@ -18,10 +18,10 @@ public class OpenGUI extends GUIFunction {
 
         switch (menu) {
             case "cub_board":
-                new CubBoardGUI(Main.instance, (CubBoard) gui.getArgs().get(CubBoard.class)).open(user);
+                new CubBoardGUI(Main.instance, gui.getArg(CubBoard.class)).open(user);
                 break;
             case "cub_board_players":
-                new CubBoardPlayersGUI(Main.instance, (CubBoard) gui.getArgs().get(CubBoard.class)).open(user);
+                new CubBoardPlayersGUI(Main.instance, gui.getArg(CubBoard.class)).open(user);
                 break;
             case "crafting_general":
                 new CraftingGUI(Main.instance, menu).open(user);

@@ -1,58 +1,59 @@
 package dev.lightdream.rustcore.gui;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.databases.User;
 import dev.lightdream.api.dto.GUIConfig;
 import dev.lightdream.api.dto.GUIItem;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.api.utils.MessageBuilder;
+import dev.lightdream.api.utils.Utils;
 import dev.lightdream.rustcore.Main;
-import dev.lightdream.rustcore.database.CubBoard;
+import dev.lightdream.rustcore.database.User;
+import dev.lightdream.rustcore.dto.Enchant;
 import dev.lightdream.rustcore.gui.functions.GUIFunctions;
+import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CubBoardPlayersGUI extends GUI {
+public class EnchantingCategoryGUI extends GUI {
 
-    private final CubBoard cubBoard;
-    private int index;
+    private ItemStack item;
+    private final Enchant enchant;
+    private int index = -1;
 
-    public CubBoardPlayersGUI(IAPI api, CubBoard cubBoard) {
+    public EnchantingCategoryGUI(IAPI api, ItemStack item, Enchant enchant) {
         super(api);
-        this.cubBoard = cubBoard;
-        this.index = -1;
+        this.item = item;
+        this.enchant = enchant;
     }
 
     @Override
     public String parse(String s, Player player) {
-        User user = Main.instance.databaseManager.getUser(player);
-        User target = Main.instance.databaseManager.getUser(new ArrayList<>(cubBoard.owners).get(index));
-
-        if (target == null) {
+        if (index < 0 || index >= enchant.levels.size()) {
             return s;
         }
 
         return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
-            put("player_name", user.name);
-            put("target_player_name", target.name);
+            put("enchant_name", enchant.name);
+            put("enchant_id", enchant.id);
+            put("enchant_level", String.valueOf(enchant.levels.get(index + 1)));
         }}).parseString();
     }
 
     @Override
     public GUIConfig setConfig() {
-        return Main.instance.config.cubBoardPlayersGUI;
+        return Main.instance.config.enchantingCategoryGUI;
     }
 
     @Override
     public InventoryProvider getProvider() {
-        return new CubBoardPlayersGUI(api, cubBoard);
+        return new EnchantingCategoryGUI(api, item, enchant);
     }
 
     @Override
@@ -62,23 +63,29 @@ public class CubBoardPlayersGUI extends GUI {
 
     @Override
     public boolean canAddItem(GUIItem guiItem, String s) {
-        if (index >= cubBoard.owners.size() - 1) {
-            return false;
+        if (guiItem.repeated) {
+            index++;
+            return index < enchant.levels.size();
         }
-        index++;
         return true;
     }
 
     @Override
     public HashMap<Class<?>, Object> getArgs() {
         return new HashMap<Class<?>, Object>() {{
-            put(CubBoard.class, cubBoard);
+            put(ItemStack.class, item);
         }};
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void setItems(Player player, InventoryContents inventoryContents) {
-
+        inventoryContents.set(Utils.getSlotPosition(Main.instance.config.enchantingItemPosition), ClickableItem.of(item, e -> {
+            User user = Main.instance.databaseManager.getUser(e.getWhoClicked());
+            user.getPlayer().getInventory().addItem(item);
+            item = null;
+            new EnchantingGUI(api, null).open(user);
+        }));
     }
 
     @Override
@@ -86,9 +93,14 @@ public class CubBoardPlayersGUI extends GUI {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public void onInventoryClose(InventoryCloseEvent inventoryCloseEvent) {
+    public void onInventoryClose(InventoryCloseEvent event) {
+        User user = Main.instance.databaseManager.getUser(event.getPlayer());
 
+        if (item != null) {
+            user.getPlayer().getInventory().addItem(item);
+        }
     }
 
     @Override
