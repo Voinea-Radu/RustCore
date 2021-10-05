@@ -22,6 +22,7 @@ public class Recipe {
     public String name;
     public List<String> description;
 
+    @SuppressWarnings("unused")
     public Recipe(String id, HashMap<XMaterial, Integer> cost, Item result, int time, String name, String description) {
         this.id = id;
         this.cost = cost;

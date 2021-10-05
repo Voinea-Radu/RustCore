@@ -214,4 +214,14 @@ public class Config extends dev.lightdream.api.configs.Config {
         ));
     }};
 
+    public Item recyclingTableItem = new Item(XMaterial.HOPPER, 1, "RecyclingTable", new ArrayList<>());
+
+    public HashMap<XMaterial, List<XMaterial>> recyclingMap = new HashMap<XMaterial, List<XMaterial>>(){{
+        put(XMaterial.DIAMOND_BOOTS, Arrays.asList(
+                XMaterial.DIAMOND,
+                XMaterial.DIAMOND,
+                XMaterial.DIAMOND
+        ));
+    }};
+
 }

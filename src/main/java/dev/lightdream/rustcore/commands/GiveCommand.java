@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GiveCommand extends SubCommand {
     public GiveCommand(@NotNull IAPI api) {
-        super(api, Collections.singletonList("give"), "", "", false, false, "[CubBoard/BuildHammer] [player]");
+        super(api, Collections.singletonList("give"), "", "", false, false, "[CubBoard/BuildHammer/RecyclingTable] [player]");
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -45,6 +45,9 @@ public class GiveCommand extends SubCommand {
             case "buildhammer":
                 target.getPlayer().getInventory().addItem(ItemBuilder.makeItem(Main.instance.config.buildHammerItem));
                 break;
+            case "recyclingtable":
+                target.getPlayer().getInventory().addItem(ItemBuilder.makeItem(Main.instance.config.recyclingTableItem));
+                break;
             default:
                 api.getMessageManager().sendMessage(commandSender, Main.instance.lang.invalidItem);
                 break;
@@ -54,7 +57,7 @@ public class GiveCommand extends SubCommand {
     @Override
     public List<String> onTabComplete(CommandSender commandSender, List<String> args) {
         if (args.size() == 1) {
-            return Arrays.asList("CubBoard", "BuildHammer");
+            return Arrays.asList("CubBoard", "BuildHammer","RecyclingTable");
         }
         return null;
     }

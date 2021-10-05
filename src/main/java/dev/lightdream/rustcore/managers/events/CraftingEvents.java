@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class CraftingEvents implements Listener {
 
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final Main plugin;
 
     public CraftingEvents(Main plugin) {

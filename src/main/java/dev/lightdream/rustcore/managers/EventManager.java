@@ -5,6 +5,7 @@ import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.managers.events.CraftingEvents;
 import dev.lightdream.rustcore.managers.events.CubBoardEvents;
 import dev.lightdream.rustcore.managers.events.EnchantingEvents;
+import dev.lightdream.rustcore.managers.events.RecyclingEvents;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -16,9 +17,11 @@ public class EventManager implements Listener {
     public EventManager(Main plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+
         plugin.getServer().getPluginManager().registerEvents(new CraftingEvents(plugin), plugin);
         plugin.getServer().getPluginManager().registerEvents(new CubBoardEvents(plugin), plugin);
         plugin.getServer().getPluginManager().registerEvents(new EnchantingEvents(plugin), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new RecyclingEvents(plugin), plugin);
     }
 
     @SuppressWarnings("UnnecessaryReturnStatement")

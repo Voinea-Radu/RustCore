@@ -3,6 +3,7 @@ package dev.lightdream.rustcore.managers;
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.rustcore.database.CubBoard;
+import dev.lightdream.rustcore.database.RecyclingTable;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -20,6 +21,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         super(api);
         setup(User.class);
         setup(CubBoard.class);
+        setup(RecyclingTable.class);
     }
 
     public CubBoard getCupBoard(PluginLocation location) {
@@ -74,7 +76,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         return optionalUser.orElse(null);
     }
 
-    public @NotNull User getUser(@NotNull HumanEntity entity){
+    public @NotNull User getUser(@NotNull HumanEntity entity) {
         return getUser((Player) entity);
     }
 
@@ -86,5 +88,34 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         return getUser((Player) sender);
     }
 
+
+    public RecyclingTable getRecyclingTable(PluginLocation location) {
+
+        System.out.println("All the recycling tables " + getAll(RecyclingTable.class));
+
+        if (location == null) {
+            return null;
+        }
+
+        for (int x = -3; x <= 3; x++) {
+            for (int y = -3; y <= 3; y++) {
+                for (int z = -3; z <= 3; z++) {
+                    PluginLocation newLocation = location.newOffset(x, y, z);
+                    //System.out.println("Searching " + newLocation);
+                    RecyclingTable output = getAll(RecyclingTable.class).stream().filter(recyclingTable -> recyclingTable.location.equals(newLocation)).findFirst().orElse(null);
+                    if (output != null) {
+                        return output;
+                    }
+                }
+            }
+        }
+
+        return null;
+
+    }
+
+    public RecyclingTable getRecyclingTable(Integer id) {
+        return getAll(RecyclingTable.class).stream().filter(recyclingTable -> recyclingTable.id == id).findFirst().orElse(null);
+    }
 
 }
