@@ -14,7 +14,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class RecyclingEvents implements Listener {
@@ -28,7 +27,6 @@ public class RecyclingEvents implements Listener {
 
     @EventHandler
     public void onHopperItemPickup(InventoryPickupItemEvent event) {
-        System.out.println(Arrays.toString(event.getInventory().getContents()));
         PluginLocation location = new PluginLocation(event.getItem().getLocation());
         ItemStack item = event.getItem().getItemStack();
 
@@ -42,24 +40,13 @@ public class RecyclingEvents implements Listener {
         Block block = recyclingTable.location.getBlock();
         Hopper hopper = (Hopper) block.getState();
 
-        //event.getItem().setItemStack(new ItemStack(Material.STONE, 0));
-        //event.getItem().remove();
-        //event.getItem().setItemStack();
-
         List<XMaterial> materials = Main.instance.config.recyclingMap.get(XMaterial.matchXMaterial(item));
 
         if (materials == null) {
             return;
         }
-        materials.forEach(material -> {
-            System.out.println(material);
-            hopper.getInventory().addItem(material.parseItem());
-        });
-        //System.out.println(Arrays.toString(event.getInventory().getContents()));
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            event.getInventory().remove(item);
-            //System.out.println(Arrays.toString(event.getInventory().getContents()));
-        }, 1);
+        materials.forEach(material -> hopper.getInventory().addItem(material.parseItem()));
+        Bukkit.getScheduler().runTaskLater(plugin, () -> event.getInventory().remove(item), 1);
 
     }
 

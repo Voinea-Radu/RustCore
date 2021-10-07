@@ -6,7 +6,6 @@ import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.libs.j256.field.DataType;
 import dev.lightdream.libs.j256.field.DatabaseField;
 import dev.lightdream.rustcore.Main;
-import lombok.NoArgsConstructor;
 
 public class RecyclingTable extends EditableDatabaseEntry {
 
@@ -21,7 +20,8 @@ public class RecyclingTable extends EditableDatabaseEntry {
         save();
     }
 
-    public RecyclingTable(){
+    @SuppressWarnings("unused")
+    public RecyclingTable() {
         super(Main.instance);
     }
 

@@ -90,9 +90,6 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
 
 
     public RecyclingTable getRecyclingTable(PluginLocation location) {
-
-        System.out.println("All the recycling tables " + getAll(RecyclingTable.class));
-
         if (location == null) {
             return null;
         }
@@ -101,7 +98,6 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
             for (int y = -3; y <= 3; y++) {
                 for (int z = -3; z <= 3; z++) {
                     PluginLocation newLocation = location.newOffset(x, y, z);
-                    //System.out.println("Searching " + newLocation);
                     RecyclingTable output = getAll(RecyclingTable.class).stream().filter(recyclingTable -> recyclingTable.location.equals(newLocation)).findFirst().orElse(null);
                     if (output != null) {
                         return output;
@@ -114,6 +110,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
 
     }
 
+    @SuppressWarnings("unused")
     public RecyclingTable getRecyclingTable(Integer id) {
         return getAll(RecyclingTable.class).stream().filter(recyclingTable -> recyclingTable.id == id).findFirst().orElse(null);
     }
