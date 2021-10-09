@@ -1,4 +1,4 @@
-package dev.lightdream.rustcore.gui;
+package dev.lightdream.rustcore.gui.cubBoard;
 
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.databases.User;
@@ -15,39 +15,44 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CubBoardGUI extends GUI {
+public class CubBoardPlayersGUI extends GUI {
 
     private final CubBoard cubBoard;
+    private int index;
 
-    public CubBoardGUI(IAPI api, CubBoard cubBoard) {
+    public CubBoardPlayersGUI(IAPI api, CubBoard cubBoard) {
         super(api);
         this.cubBoard = cubBoard;
+        this.index = -1;
     }
 
     @Override
     public String parse(String s, Player player) {
         User user = Main.instance.databaseManager.getUser(player);
+        User target = Main.instance.databaseManager.getUser(new ArrayList<>(cubBoard.owners).get(index));
+
+        if (target == null) {
+            return s;
+        }
+
         return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
             put("player_name", user.name);
-            put("wood_current_amount", String.valueOf(cubBoard.wood));
-            put("cobblestone_current_amount", String.valueOf(cubBoard.cobblestone));
-            put("iron_current_amount", String.valueOf(cubBoard.iron));
-            put("diamond_current_amount", String.valueOf(cubBoard.diamond));
-            put("emerald_current_amount", String.valueOf(cubBoard.emerald));
+            put("target_player_name", target.name);
         }}).parseString();
     }
 
     @Override
     public GUIConfig setConfig() {
-        return Main.instance.config.cubBoardGUI;
+        return Main.instance.config.cubBoardPlayersGUI;
     }
 
     @Override
     public InventoryProvider getProvider() {
-        return new CubBoardGUI(api, cubBoard);
+        return new CubBoardPlayersGUI(api, cubBoard);
     }
 
     @Override
@@ -57,6 +62,10 @@ public class CubBoardGUI extends GUI {
 
     @Override
     public boolean canAddItem(GUIItem guiItem, String s) {
+        if (index >= cubBoard.owners.size() - 1) {
+            return false;
+        }
+        index++;
         return true;
     }
 
@@ -91,4 +100,5 @@ public class CubBoardGUI extends GUI {
     public void onPlayerInventoryClick(InventoryClickEvent inventoryClickEvent) {
 
     }
+
 }

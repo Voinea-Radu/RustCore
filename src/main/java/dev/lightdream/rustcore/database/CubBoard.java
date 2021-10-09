@@ -8,6 +8,7 @@ import dev.lightdream.libs.j256.field.DataType;
 import dev.lightdream.libs.j256.field.DatabaseField;
 import dev.lightdream.libs.j256.table.DatabaseTable;
 import dev.lightdream.rustcore.Main;
+import lombok.NoArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 

@@ -1,58 +1,52 @@
-package dev.lightdream.rustcore.gui;
+package dev.lightdream.rustcore.gui.passwordChest;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.databases.User;
 import dev.lightdream.api.dto.GUIConfig;
 import dev.lightdream.api.dto.GUIItem;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
-import dev.lightdream.rustcore.database.CubBoard;
+import dev.lightdream.rustcore.database.PasswordChest;
+import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.gui.functions.GUIFunctions;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CubBoardPlayersGUI extends GUI {
+public class OpenPasswordGUI extends GUI {
 
-    private final CubBoard cubBoard;
-    private int index;
+    public int index = -1;
+    public String password = "";
+    public User user;
+    public PasswordChest chest;
 
-    public CubBoardPlayersGUI(IAPI api, CubBoard cubBoard) {
+    public OpenPasswordGUI(IAPI api, User user, PasswordChest chest) {
         super(api);
-        this.cubBoard = cubBoard;
-        this.index = -1;
+        this.user = user;
+        this.chest = chest;
     }
 
     @Override
     public String parse(String s, Player player) {
-        User user = Main.instance.databaseManager.getUser(player);
-        User target = Main.instance.databaseManager.getUser(new ArrayList<>(cubBoard.owners).get(index));
-
-        if (target == null) {
-            return s;
-        }
-
         return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
-            put("player_name", user.name);
-            put("target_player_name", target.name);
+            put("amount", String.valueOf(index + 1));
         }}).parseString();
     }
 
     @Override
     public GUIConfig setConfig() {
-        return Main.instance.config.cubBoardPlayersGUI;
+        return Main.instance.config.passwordGUI;
     }
 
     @Override
     public InventoryProvider getProvider() {
-        return new CubBoardPlayersGUI(api, cubBoard);
+        return new OpenPasswordGUI(api, user, chest);
     }
 
     @Override
@@ -62,17 +56,19 @@ public class CubBoardPlayersGUI extends GUI {
 
     @Override
     public boolean canAddItem(GUIItem guiItem, String s) {
-        if (index >= cubBoard.owners.size() - 1) {
-            return false;
+        if (guiItem.repeated) {
+            index++;
+            return index < guiItem.nextSlots.size();
         }
-        index++;
         return true;
     }
 
     @Override
     public HashMap<Class<?>, Object> getArgs() {
         return new HashMap<Class<?>, Object>() {{
-            put(CubBoard.class, cubBoard);
+            put(String.class, password);
+            put(User.class, user);
+            put(Chest.class, chest);
         }};
     }
 
@@ -101,4 +97,19 @@ public class CubBoardPlayersGUI extends GUI {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
+    public void addDigit(String s) {
+        this.password += s;
+        if (this.password.length() == Main.instance.config.codeLength) {
+            if (attemptUnlock()) {
+                chest.open(user, password);
+                return;
+            }
+            user.getPlayer().closeInventory();
+        }
+    }
+
+    private boolean attemptUnlock() {
+        return chest.password.equals(password);
+    }
 }

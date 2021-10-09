@@ -216,12 +216,32 @@ public class Config extends dev.lightdream.api.configs.Config {
 
     public Item recyclingTableItem = new Item(XMaterial.HOPPER, 1, "RecyclingTable", new ArrayList<>());
 
-    public HashMap<XMaterial, List<XMaterial>> recyclingMap = new HashMap<XMaterial, List<XMaterial>>(){{
+    public HashMap<XMaterial, List<XMaterial>> recyclingMap = new HashMap<XMaterial, List<XMaterial>>() {{
         put(XMaterial.DIAMOND_BOOTS, Arrays.asList(
                 XMaterial.DIAMOND,
                 XMaterial.DIAMOND,
                 XMaterial.DIAMOND
         ));
     }};
+
+    public Item passwordChestItem = new Item(XMaterial.CHEST, 1, "Password Chest", new ArrayList<>());
+
+    public GUIConfig passwordGUI = new GUIConfig(
+            "password_gui",
+            "CHEST",
+            "Password",
+            6,
+            new Item(XMaterial.GRAY_STAINED_GLASS_PANE, ""),
+            new HashMap<String, GUIItem>() {{
+                put("pad", new GUIItem(new Item(XMaterial.OAK_BUTTON, (Integer) null), new GUIItem.GUIItemArgs(new HashMap<String, Object>() {{
+                    put("add_digit", "%amount%");
+                }}),
+                        Arrays.asList(12, 13, 14, 21, 22, 23, 30, 31, 32)
+                ));
+            }},
+            false
+    );
+
+    public int codeLength = 5;
 
 }

@@ -9,6 +9,7 @@ public enum GUIFunctions {
     OPEN_GUI_WITH_ARGS(new OpenGUIWithArgs()),
     REMOVE_PLAYER(new RemovePlayer()),
     ENCHANT_ITEM(new EnchantItem()),
+    ADD_DIGIT(new AddDigit()),
     CRAFT_RECIPE(new CraftRecipe());
 
     public GUIFunction function;

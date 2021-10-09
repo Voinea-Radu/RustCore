@@ -5,8 +5,11 @@ import dev.lightdream.api.databases.EditableDatabaseEntry;
 import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.libs.j256.field.DataType;
 import dev.lightdream.libs.j256.field.DatabaseField;
+import dev.lightdream.libs.j256.table.DatabaseTable;
 import dev.lightdream.rustcore.Main;
+import lombok.NoArgsConstructor;
 
+@DatabaseTable(tableName = "recycling_tables")
 public class RecyclingTable extends EditableDatabaseEntry {
 
     @DatabaseField(columnName = "id", generatedId = true, canBeNull = false)

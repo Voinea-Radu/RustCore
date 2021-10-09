@@ -5,8 +5,8 @@ import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.CubBoard;
 import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.gui.CraftingGUI;
-import dev.lightdream.rustcore.gui.CubBoardGUI;
-import dev.lightdream.rustcore.gui.CubBoardPlayersGUI;
+import dev.lightdream.rustcore.gui.cubBoard.CubBoardGUI;
+import dev.lightdream.rustcore.gui.cubBoard.CubBoardPlayersGUI;
 import dev.lightdream.rustcore.gui.functions.GUIFunction;
 
 import java.util.List;

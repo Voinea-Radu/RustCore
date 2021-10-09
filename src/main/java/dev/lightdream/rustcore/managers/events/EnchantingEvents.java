@@ -2,7 +2,7 @@ package dev.lightdream.rustcore.managers.events;
 
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
-import dev.lightdream.rustcore.gui.EnchantingGUI;
+import dev.lightdream.rustcore.gui.enchanting.EnchantingGUI;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

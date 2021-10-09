@@ -2,7 +2,7 @@ package dev.lightdream.rustcore.gui.functions.functions;
 
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.rustcore.database.User;
-import dev.lightdream.rustcore.gui.EnchantingGUI;
+import dev.lightdream.rustcore.gui.enchanting.EnchantingGUI;
 import dev.lightdream.rustcore.gui.functions.GUIFunction;
 import dev.lightdream.rustcore.utils.Utils;
 import org.bukkit.enchantments.Enchantment;

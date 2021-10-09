@@ -3,7 +3,7 @@ package dev.lightdream.rustcore.gui.functions.functions;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
-import dev.lightdream.rustcore.gui.EnchantingCategoryGUI;
+import dev.lightdream.rustcore.gui.enchanting.EnchantingCategoryGUI;
 import dev.lightdream.rustcore.gui.functions.GUIFunction;
 import dev.lightdream.rustcore.utils.Utils;
 import org.bukkit.inventory.ItemStack;

@@ -56,9 +56,6 @@ public class RecyclingEvents implements Listener {
         PluginLocation pluginLocation = new PluginLocation(event.getBlock().getLocation());
 
         if (!Main.instance.config.recyclingTableItem.equals(inHandItem, false)) {
-            System.out.println("Not recycling table");
-            System.out.println(inHandItem);
-            System.out.println(Main.instance.config.recyclingTableItem);
             return;
         }
 

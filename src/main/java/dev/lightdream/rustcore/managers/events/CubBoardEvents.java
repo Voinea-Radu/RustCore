@@ -7,7 +7,7 @@ import dev.lightdream.api.gui.GUI;
 import dev.lightdream.api.utils.NbtUtils;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.CubBoard;
-import dev.lightdream.rustcore.gui.CubBoardGUI;
+import dev.lightdream.rustcore.gui.cubBoard.CubBoardGUI;
 import fr.minuskube.inv.SmartInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

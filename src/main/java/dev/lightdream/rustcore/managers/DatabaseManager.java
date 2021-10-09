@@ -3,6 +3,7 @@ package dev.lightdream.rustcore.managers;
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.rustcore.database.CubBoard;
+import dev.lightdream.rustcore.database.PasswordChest;
 import dev.lightdream.rustcore.database.RecyclingTable;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.Bukkit;
@@ -22,6 +23,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         setup(User.class);
         setup(CubBoard.class);
         setup(RecyclingTable.class);
+        setup(PasswordChest.class);
     }
 
     public CubBoard getCupBoard(PluginLocation location) {
@@ -115,4 +117,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         return getAll(RecyclingTable.class).stream().filter(recyclingTable -> recyclingTable.id == id).findFirst().orElse(null);
     }
 
+    public PasswordChest getPasswordChest(PluginLocation location) {
+        return getAll(PasswordChest.class).stream().filter(passwordChest -> passwordChest.location.equals(location)).findFirst().orElse(null);
+    }
 }
