@@ -5,7 +5,15 @@ import dev.lightdream.api.LightDreamPlugin;
 import dev.lightdream.api.configs.SQLConfig;
 import dev.lightdream.api.databases.User;
 import dev.lightdream.api.managers.MessageManager;
+import dev.lightdream.rustcore.commands.ClanCommand;
+import dev.lightdream.rustcore.commands.GamemodeCommand;
 import dev.lightdream.rustcore.commands.GiveCommand;
+import dev.lightdream.rustcore.commands.VanishCommand;
+import dev.lightdream.rustcore.commands.bans.BanCommand;
+import dev.lightdream.rustcore.commands.bans.BanIpCommand;
+import dev.lightdream.rustcore.commands.bans.UnbanCommand;
+import dev.lightdream.rustcore.commands.mutes.MuteCommand;
+import dev.lightdream.rustcore.commands.mutes.UnMuteCommand;
 import dev.lightdream.rustcore.config.Config;
 import dev.lightdream.rustcore.config.Lang;
 import dev.lightdream.rustcore.managers.DatabaseManager;
@@ -66,6 +74,14 @@ public final class Main extends LightDreamPlugin {
     @Override
     public void loadBaseCommands() {
         baseSubCommands.add(new GiveCommand(this));
+        baseSubCommands.add(new ClanCommand(this));
+        baseSubCommands.add(new VanishCommand(this));
+        baseSubCommands.add(new GamemodeCommand(this));
+        baseSubCommands.add(new BanCommand(this));
+        baseSubCommands.add(new BanIpCommand(this));
+        baseSubCommands.add(new UnbanCommand(this));
+        baseSubCommands.add(new MuteCommand(this));
+        baseSubCommands.add(new UnMuteCommand(this));
     }
 
     @Override

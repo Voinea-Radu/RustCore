@@ -2,10 +2,7 @@ package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.dto.PluginLocation;
-import dev.lightdream.rustcore.database.CubBoard;
-import dev.lightdream.rustcore.database.PasswordChest;
-import dev.lightdream.rustcore.database.RecyclingTable;
-import dev.lightdream.rustcore.database.User;
+import dev.lightdream.rustcore.database.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -24,6 +21,9 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         setup(CubBoard.class);
         setup(RecyclingTable.class);
         setup(PasswordChest.class);
+        setup(Clan.class);
+        setup(Ban.class);
+        setup(Mute.class);
     }
 
     public CubBoard getCupBoard(PluginLocation location) {
@@ -44,14 +44,14 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         return getAll(CubBoard.class).stream().filter(cubBoard -> cubBoard.id == id).findFirst().orElse(null);
     }
 
-    public @NotNull User getUser(@NotNull UUID uuid) {
+    public @NotNull User getUser(@NotNull UUID uuid, String ip) {
         Optional<User> optionalUser = getAll(User.class).stream().filter(user -> user.uuid.equals(uuid)).findFirst();
 
         if (optionalUser.isPresent()) {
             return optionalUser.get();
         }
 
-        User user = new User(uuid, Bukkit.getOfflinePlayer(uuid).getName(), api.getSettings().baseLang);
+        User user = new User(uuid, Bukkit.getOfflinePlayer(uuid).getName(), api.getSettings().baseLang, ip);
         save(user);
         return user;
     }
@@ -64,11 +64,11 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
 
     @SuppressWarnings("unused")
     public @NotNull User getUser(@NotNull OfflinePlayer player) {
-        return getUser(player.getUniqueId());
+        return getUser(player.getUniqueId(), "");
     }
 
     public @NotNull User getUser(@NotNull Player player) {
-        return getUser(player.getUniqueId());
+        return getUser(player.getUniqueId(), player.getAddress().getHostName());
     }
 
     @SuppressWarnings("unused")
@@ -91,7 +91,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
     }
 
 
-    public RecyclingTable getRecyclingTable(PluginLocation location) {
+    public @Nullable RecyclingTable getRecyclingTable(PluginLocation location) {
         if (location == null) {
             return null;
         }
@@ -113,11 +113,39 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
     }
 
     @SuppressWarnings("unused")
-    public RecyclingTable getRecyclingTable(Integer id) {
+    public @Nullable RecyclingTable getRecyclingTable(Integer id) {
         return getAll(RecyclingTable.class).stream().filter(recyclingTable -> recyclingTable.id == id).findFirst().orElse(null);
     }
 
-    public PasswordChest getPasswordChest(PluginLocation location) {
+    public @Nullable PasswordChest getPasswordChest(PluginLocation location) {
         return getAll(PasswordChest.class).stream().filter(passwordChest -> passwordChest.location.equals(location)).findFirst().orElse(null);
+    }
+
+    public @Nullable Clan getClan(User user) {
+        return getAll(Clan.class).stream().filter(clan -> clan.members.contains(user.id)).findFirst().orElse(null);
+    }
+
+    public @Nullable Clan getClan(String name) {
+        return getAll(Clan.class).stream().filter(clan -> clan.name.equals(name)).findFirst().orElse(null);
+    }
+
+    public @Nullable Ban getBan(User user) {
+        return getAll(Ban.class).stream().filter(ban -> {
+            if (ban.user.equals(user)) {
+                return true;
+            }
+            if (ban.ip) {
+                for (String ip : ban.user.ips) {
+                    if (user.ips.contains(ip)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }).findFirst().orElse(null);
+    }
+
+    public @Nullable Mute getMute(User user) {
+        return getAll(Mute.class).stream().filter(mute -> mute.user.equals(user)).findFirst().orElse(null);
     }
 }

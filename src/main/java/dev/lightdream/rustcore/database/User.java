@@ -3,25 +3,42 @@ package dev.lightdream.rustcore.database;
 
 import dev.lightdream.api.utils.ItemBuilder;
 import dev.lightdream.api.utils.ScoreBoardUtils;
+import dev.lightdream.libs.fasterxml.annotation.JsonIgnore;
+import dev.lightdream.libs.j256.field.DatabaseField;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.dto.Recipe;
 import lombok.NoArgsConstructor;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor
 public class User extends dev.lightdream.api.databases.User {
 
+    @DatabaseField(columnName = "vanished")
+    public boolean vanished;
+    @DatabaseField(columnName = "god")
+    public boolean god;
+    //Bans
+    @DatabaseField(columnName = "ip")
+    public HashSet<String> ips;
+
     private final List<Recipe> activeRecipes = new ArrayList<>();
     private int recipeProgress = 0;
 
-    public User(UUID uuid, String name, String lang) {
+
+    public User(UUID uuid, String name, String lang, String ip) {
         super(uuid, name, lang);
+        this.vanished = false;
+        this.god = false;
+        this.ips = new HashSet<>();
+        this.ips.add(ip);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -108,6 +125,11 @@ public class User extends dev.lightdream.api.databases.User {
         this.activeRecipes.add(recipe);
     }
 
+    @JsonIgnore
+    public @Nullable Clan getClan() {
+        return Main.instance.databaseManager.getClan(this);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -118,5 +140,24 @@ public class User extends dev.lightdream.api.databases.User {
                 ", name='" + name + '\'' +
                 ", lang='" + lang + '\'' +
                 '}';
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public void setVanished(boolean vanished) {
+        this.vanished = vanished;
+        if (!isOnline()) {
+            return;
+        }
+        if (vanished) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.hidePlayer(getPlayer());
+            }
+            getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
+        } else {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.showPlayer(getPlayer());
+            }
+            getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+        }
     }
 }

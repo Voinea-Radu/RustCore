@@ -70,7 +70,7 @@
         <dependency>
             <groupId>dev.lightdream</groupId>
             <artifactId>LightDreamAPI</artifactId>
-            <version>2.196</version>
+            <version>3.0</version>
         </dependency>
         <dependency>
             <groupId>xyz.xenondevs</groupId>

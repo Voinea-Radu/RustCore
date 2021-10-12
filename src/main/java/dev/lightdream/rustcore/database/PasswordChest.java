@@ -31,10 +31,13 @@ public class PasswordChest extends EditableDatabaseEntry {
         save();
     }
 
+    @SuppressWarnings("unused")
     public PasswordChest() {
         super(Main.instance);
+        save();
     }
 
+    @SuppressWarnings("unused")
     public boolean canOpen(User user) {
         return canOpen(user, "");
     }

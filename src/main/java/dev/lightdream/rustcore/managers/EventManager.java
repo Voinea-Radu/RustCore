@@ -2,9 +2,12 @@ package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.dto.Item;
 import dev.lightdream.rustcore.Main;
+import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.managers.events.*;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class EventManager implements Listener {
@@ -30,6 +33,18 @@ public class EventManager implements Listener {
 
         if (!item.equals(plugin.config.buildHammerItem, false)) {
             return;
+        }
+    }
+
+    public void onGodDamage(EntityDamageEvent event){
+        if(!(event.getEntity() instanceof Player)){
+            return;
+        }
+
+        User user = plugin.getDatabaseManager().getUser((Player) event.getEntity());
+
+        if(user.god){
+            event.setCancelled(true);
         }
     }
 

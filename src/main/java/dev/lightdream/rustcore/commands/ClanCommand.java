@@ -1,0 +1,231 @@
+package dev.lightdream.rustcore.commands;
+
+import dev.lightdream.api.IAPI;
+import dev.lightdream.api.commands.SubCommand;
+import dev.lightdream.api.utils.MessageBuilder;
+import dev.lightdream.rustcore.Main;
+import dev.lightdream.rustcore.database.Clan;
+import dev.lightdream.rustcore.database.User;
+import org.bukkit.command.CommandSender;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+public class ClanCommand extends SubCommand {
+    public ClanCommand(IAPI api) {
+        super(api, Collections.singletonList("clan"), "", "", true, false, "[create/join//invite/kick/giveOwner//leave/delete/info] [name//user]");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public void execute(CommandSender sender, List<String> args) {
+        if (args.size() == 0) {
+            sendUsage(sender);
+            return;
+        }
+
+        String command = args.get(0);
+        User user = Main.instance.databaseManager.getUser(sender);
+        String name;
+        String targetName;
+        User target;
+        Clan clan;
+        Clan targetClan;
+
+        if (user == null) {
+            sendUsage(sender);
+            return;
+        }
+
+        switch (command.toLowerCase()) {
+            case "create":
+                if (args.size() != 2) {
+                    sendUsage(sender);
+                    return;
+                }
+
+                name = args.get(1);
+                Clan c1 = user.getClan();
+                Clan c2 = Main.instance.databaseManager.getClan(name);
+
+                if (c1 != null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.alreadyInClan);
+                    return;
+                }
+
+                if (c2 != null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.clanAlreadyExists);
+                    return;
+                }
+
+                new Clan(user, name);
+                break;
+            case "join":
+                if (args.size() != 2) {
+                    sendUsage(sender);
+                    return;
+                }
+
+                name = args.get(1);
+                clan = Main.instance.databaseManager.getClan(name);
+
+                if (clan == null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidClan);
+                    return;
+                }
+
+                if (clan.invites.contains(user.id)) {
+                    clan.join(user);
+                    return;
+                }
+
+                Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notInvited);
+                break;
+            case "invite":
+                if (args.size() != 2) {
+                    sendUsage(sender);
+                    return;
+                }
+
+                targetName = args.get(1);
+                target = Main.instance.databaseManager.getUser(targetName);
+                clan = user.getClan();
+
+                if (clan == null || !clan.owner.equals(user)) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notOwnClan);
+                    return;
+                }
+
+                if (target == null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+                    return;
+                }
+
+                if (target.getClan() != null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.targetAlreadyInClan);
+                    return;
+                }
+
+                clan.invite(target);
+                break;
+            case "kick":
+                if (args.size() != 2) {
+                    sendUsage(sender);
+                    return;
+                }
+
+                targetName = args.get(1);
+                target = Main.instance.databaseManager.getUser(targetName);
+                clan = user.getClan();
+
+                if (clan == null || !clan.owner.equals(user)) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notOwnClan);
+                    return;
+                }
+
+                if (target == null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+                    return;
+                }
+
+                targetClan = target.getClan();
+
+                if (clan != targetClan) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notSameClan);
+                    return;
+                }
+
+                clan.leave(target);
+                break;
+            case "giveowner":
+                if (args.size() != 2) {
+                    sendUsage(sender);
+                    return;
+                }
+
+                targetName = args.get(1);
+                target = Main.instance.databaseManager.getUser(targetName);
+                clan = user.getClan();
+
+                if (clan == null || !clan.owner.equals(user)) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notOwnClan);
+                    return;
+                }
+
+                if (target == null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+                    return;
+                }
+
+                targetClan = target.getClan();
+
+                if (clan != targetClan) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notSameClan);
+                    return;
+                }
+
+                clan.changeOwner(target);
+                break;
+            case "leave":
+                clan = user.getClan();
+
+                if (clan == null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notInClan);
+                    return;
+                }
+
+                if (clan.owner.equals(user)) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.mustFirstDelete);
+                    return;
+                }
+                clan.leave(user);
+                break;
+            case "delete":
+                clan = user.getClan();
+
+                if (clan == null) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notInClan);
+                    return;
+                }
+
+                if (!clan.owner.equals(user)) {
+                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notOwnClan);
+                    return;
+                }
+                clan.delete();
+                break;
+            case "info":
+                clan = user.getClan();
+
+                if (clan == null) {
+                    return;
+                }
+
+                StringBuilder members = new StringBuilder();
+
+                for (Integer memberID : clan.members) {
+                    members.append(Main.instance.databaseManager.getUser(memberID).name).append(", ");
+                }
+                members.append(",");
+                members = new StringBuilder(members.toString().replace(", ,", ""));
+
+                StringBuilder finalMembers = members;
+                Main.instance.getMessageManager().sendMessage(user, new MessageBuilder(Main.instance.lang.clanInfo).addPlaceholders(new HashMap<String, String>() {{
+                    put("clan_name", clan.name);
+                    put("clan_owner", clan.owner.name);
+                    put("clan_members", finalMembers.toString());
+                    put("clan_members_count", String.valueOf(clan.members.size()));
+                }}));
+                break;
+            default:
+                sendUsage(sender);
+                break;
+        }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, List<String> list) {
+        return null;
+    }
+}

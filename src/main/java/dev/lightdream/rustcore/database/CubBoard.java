@@ -69,6 +69,7 @@ public class CubBoard extends EditableDatabaseEntry {
     @SuppressWarnings("unused")
     public CubBoard() {
         super(Main.instance);
+        save();
     }
 
     public LocationRange getProtectionRange() {
