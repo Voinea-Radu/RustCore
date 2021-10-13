@@ -38,6 +38,8 @@ public class Lang extends dev.lightdream.api.configs.Lang {
     public String unMuted = "UnMuted";
     public String notMuted = "Not Muted";
     public String speedChanged = "Speed changed";
+    public String banMessage = "You have been banned for the reason %reason% for %duration%";
+    public String youAreMuted = "You are muted";
 
 
 }

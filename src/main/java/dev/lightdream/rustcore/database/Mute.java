@@ -29,6 +29,10 @@ public class Mute extends EditableDatabaseEntry {
         save();
     }
 
+    public Mute(){
+        super(Main.instance);
+    }
+
     @Override
     public Integer getID() {
         return id;

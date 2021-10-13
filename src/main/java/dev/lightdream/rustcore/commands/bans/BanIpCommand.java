@@ -38,9 +38,7 @@ public class BanIpCommand extends SubCommand {
             return;
         }
 
-        Ban ban = Main.instance.databaseManager.getBan(target);
-
-        if (ban != null) {
+        if (target.isBanned()) {
             Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.alreadyBanned);
             return;
         }
@@ -58,7 +56,7 @@ public class BanIpCommand extends SubCommand {
             return;
         }
 
-        new Ban(target, user, period, reason.toString(), false);
+        target.ban(user, period, reason.toString(), true);
         Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.banned);
     }
 

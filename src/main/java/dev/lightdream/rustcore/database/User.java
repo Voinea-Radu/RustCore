@@ -4,6 +4,7 @@ package dev.lightdream.rustcore.database;
 import dev.lightdream.api.utils.ItemBuilder;
 import dev.lightdream.api.utils.ScoreBoardUtils;
 import dev.lightdream.libs.fasterxml.annotation.JsonIgnore;
+import dev.lightdream.libs.j256.field.DataType;
 import dev.lightdream.libs.j256.field.DatabaseField;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.dto.Recipe;
@@ -21,15 +22,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 @NoArgsConstructor
 public class User extends dev.lightdream.api.databases.User {
 
+    private final List<Recipe> activeRecipes = new ArrayList<>();
     @DatabaseField(columnName = "vanished")
     public boolean vanished;
     @DatabaseField(columnName = "god")
     public boolean god;
-    //Bans
-    @DatabaseField(columnName = "ip")
+    @DatabaseField(columnName = "ip", dataType = DataType.SERIALIZABLE)
     public HashSet<String> ips;
-
-    private final List<Recipe> activeRecipes = new ArrayList<>();
     private int recipeProgress = 0;
 
 
@@ -159,5 +158,46 @@ public class User extends dev.lightdream.api.databases.User {
             }
             getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
         }
+    }
+
+    public void ban(User by, Long duration, String reason, boolean ip) {
+        new Ban(this, by, duration, reason, ip);
+        if (isOnline()) {
+            getPlayer().kickPlayer("");
+        }
+    }
+
+    public void unban() {
+        if (!isBanned()) {
+            return;
+        }
+        getBan().unban();
+    }
+
+    public void mute(User by, Long duration, String reason) {
+        new Mute(this, by, duration, reason);
+    }
+
+    public void unmute() {
+        if (!isMuted()) {
+            return;
+        }
+        getMute().unmute();
+    }
+
+    public boolean isBanned() {
+        return getBan() != null;
+    }
+
+    public boolean isMuted() {
+        return getMute() != null;
+    }
+
+    public Ban getBan() {
+        return Main.instance.databaseManager.getBan(this);
+    }
+
+    public Mute getMute() {
+        return Main.instance.databaseManager.getMute(this);
     }
 }

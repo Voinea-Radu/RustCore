@@ -35,9 +35,9 @@ public class SpeedCommand extends SubCommand {
         }
 
         if (user.getPlayer().isFlying()) {
-            user.getPlayer().setFlySpeed(amount);
+            user.getPlayer().setFlySpeed(getSpeed(amount, true));
         } else {
-            user.getPlayer().setWalkSpeed(amount);
+            user.getPlayer().setWalkSpeed(getSpeed(amount, false));
         }
 
         Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.speedChanged);
@@ -46,5 +46,17 @@ public class SpeedCommand extends SubCommand {
     @Override
     public List<String> onTabComplete(CommandSender commandSender, List<String> list) {
         return null;
+    }
+
+    private float getSpeed(float speed, boolean fly) {
+        final float defaultSpeed = fly ? 0.1f : 0.2f;
+        float maxSpeed = 1f;
+
+        if (speed < 1f) {
+            return defaultSpeed * speed;
+        }
+        final float ratio = ((speed - 1) / 9) * (maxSpeed - defaultSpeed);
+        return ratio + defaultSpeed;
+
     }
 }

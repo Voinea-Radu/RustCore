@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MuteCommand extends SubCommand {
     public MuteCommand(@NotNull IAPI api) {
-        super(api, Collections.singletonList("mute"), "", "", false, false, "[player] [period] [reason]");
+        super(api, Collections.singletonList("mute"), "", "", true, false, "[player] [period] [reason]");
     }
 
     @Override
@@ -38,9 +38,7 @@ public class MuteCommand extends SubCommand {
             return;
         }
 
-        Mute mute = Main.instance.databaseManager.getMute(target);
-
-        if (mute != null) {
+        if (target.isMuted()) {
             Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.alreadyMuted);
             return;
         }
@@ -52,13 +50,13 @@ public class MuteCommand extends SubCommand {
             reason.append(args.get(i));
         }
 
-        Long period = Utils.stringToPeriod(timeString);
-        if (period == null) {
+        Long duration = Utils.stringToPeriod(timeString);
+        if (duration == null) {
             Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidTime);
             return;
         }
 
-        new Mute(target, user, period, reason.toString());
+        target.mute(user, duration, reason.toString());
         Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.muted);
     }
 

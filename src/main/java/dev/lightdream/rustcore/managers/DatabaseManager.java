@@ -131,6 +131,9 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
 
     public @Nullable Ban getBan(User user) {
         return getAll(Ban.class).stream().filter(ban -> {
+            if (ban.expire <= System.currentTimeMillis()) {
+                return false;
+            }
             if (ban.user.equals(user)) {
                 return true;
             }
@@ -146,6 +149,11 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
     }
 
     public @Nullable Mute getMute(User user) {
-        return getAll(Mute.class).stream().filter(mute -> mute.user.equals(user)).findFirst().orElse(null);
+        return getAll(Mute.class).stream().filter(mute -> {
+            if (mute.expire <= System.currentTimeMillis()) {
+                return false;
+            }
+            return mute.user.equals(user);
+        }).findFirst().orElse(null);
     }
 }

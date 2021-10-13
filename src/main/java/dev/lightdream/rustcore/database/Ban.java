@@ -4,6 +4,7 @@ import dev.lightdream.api.databases.EditableDatabaseEntry;
 import dev.lightdream.libs.j256.field.DatabaseField;
 import dev.lightdream.libs.j256.table.DatabaseTable;
 import dev.lightdream.rustcore.Main;
+import lombok.NoArgsConstructor;
 
 @DatabaseTable(tableName = "bans")
 public class Ban extends EditableDatabaseEntry {
@@ -30,6 +31,10 @@ public class Ban extends EditableDatabaseEntry {
         this.reason = reason;
         this.ip = ip;
         save();
+    }
+
+    public Ban(){
+        super(Main.instance);
     }
 
     @Override

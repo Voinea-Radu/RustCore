@@ -3,7 +3,6 @@ package dev.lightdream.rustcore.commands.bans;
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.commands.SubCommand;
 import dev.lightdream.rustcore.Main;
-import dev.lightdream.rustcore.database.Ban;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class UnbanCommand extends SubCommand {
     public UnbanCommand(@NotNull IAPI api) {
-        super(api, Collections.singletonList("unban"), "", "", false, false, "[player]");
+        super(api, Collections.singletonList("unban"), "", "", true, false, "[player]");
     }
 
     @Override
@@ -36,14 +35,12 @@ public class UnbanCommand extends SubCommand {
             return;
         }
 
-        Ban ban = Main.instance.databaseManager.getBan(target);
-
-        if (ban == null) {
+        if (!target.isBanned()) {
             Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notBanned);
             return;
         }
 
-        ban.unban();
+        target.unban();
         Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.unBanned);
     }
 

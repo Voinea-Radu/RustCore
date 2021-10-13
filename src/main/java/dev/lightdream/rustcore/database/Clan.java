@@ -30,9 +30,7 @@ public class Clan extends EditableDatabaseEntry {
         this.owner = user;
         this.name = name;
         this.members.add(owner.id);
-        System.out.println("Created");
         save();
-        System.out.println("Why not?");
         Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.clanCleared);
     }
 

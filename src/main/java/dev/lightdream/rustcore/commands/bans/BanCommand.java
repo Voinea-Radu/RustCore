@@ -37,9 +37,7 @@ public class BanCommand extends SubCommand {
             return;
         }
 
-        Ban ban = Main.instance.databaseManager.getBan(target);
-
-        if (ban != null) {
+        if (user.isBanned()) {
             Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.alreadyBanned);
             return;
         }
@@ -51,13 +49,13 @@ public class BanCommand extends SubCommand {
             reason.append(args.get(i));
         }
 
-        Long period = Utils.stringToPeriod(timeString);
-        if (period == null) {
+        Long duration = Utils.stringToPeriod(timeString);
+        if (duration == null) {
             Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidTime);
             return;
         }
 
-        new Ban(target, user, period, reason.toString(), false);
+        target.ban(user, duration, reason.toString(), false);
         Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.banned);
     }
 
