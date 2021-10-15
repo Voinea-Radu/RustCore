@@ -81,6 +81,13 @@ public final class Main extends LightDreamPlugin {
         baseSubCommands.add(new UnMuteCommand(this));
         baseSubCommands.add(new GodCommand(this));
         baseSubCommands.add(new SpeedCommand(this));
+        baseSubCommands.add(new TimeCommand(this));
+        baseSubCommands.add(new WeatherCommand(this));
+        baseSubCommands.add(new FeedCommand(this));
+        baseSubCommands.add(new HealCommand(this));
+        baseSubCommands.add(new KickCommand(this));
+        baseSubCommands.add(new ListCommand(this));
+        baseSubCommands.add(new TPHereCommand(this));
     }
 
     @Override

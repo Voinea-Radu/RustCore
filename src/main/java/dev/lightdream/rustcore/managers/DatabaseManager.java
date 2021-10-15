@@ -156,4 +156,6 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
             return mute.user.equals(user);
         }).findFirst().orElse(null);
     }
+
+
 }

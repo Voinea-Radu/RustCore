@@ -31,9 +31,8 @@ public class User extends dev.lightdream.api.databases.User {
     public HashSet<String> ips;
     private int recipeProgress = 0;
 
-
     public User(UUID uuid, String name, String lang, String ip) {
-        super(uuid, name, lang);
+        super(Main.instance, uuid, name, lang);
         this.vanished = false;
         this.god = false;
         this.ips = new HashSet<>();
@@ -160,6 +159,7 @@ public class User extends dev.lightdream.api.databases.User {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void ban(User by, Long duration, String reason, boolean ip) {
         new Ban(this, by, duration, reason, ip);
         if (isOnline()) {

@@ -1,28 +1,24 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.commands.SubCommand;
 import dev.lightdream.api.databases.User;
 import dev.lightdream.api.utils.ItemBuilder;
 import dev.lightdream.rustcore.Main;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class GiveCommand extends SubCommand {
     public GiveCommand(@NotNull IAPI api) {
-        super(api, Collections.singletonList("give"), "", "", false, false, "[CubBoard/BuildHammer/" +
-                "RecyclingTable/PasswordChest] [player]");
+        super(api, "give", false, false, "[CubBoard/BuildHammer/RecyclingTable/PasswordChest] [player]");
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void execute(CommandSender commandSender, List<String> args) {
+    public void execute(dev.lightdream.rustcore.database.User user, List<String> args) {
         if (args.size() != 2) {
-            sendUsage(commandSender);
+            sendUsage(user);
             return;
         }
 
@@ -30,12 +26,12 @@ public class GiveCommand extends SubCommand {
         User target = Main.instance.databaseManager.getUser(args.get(1));
 
         if (target == null) {
-            api.getMessageManager().sendMessage(commandSender, Main.instance.lang.invalidUser);
+            api.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
             return;
         }
 
         if (!target.isOnline()) {
-            api.getMessageManager().sendMessage(commandSender, Main.instance.lang.offlineUser);
+            api.getMessageManager().sendMessage(user, Main.instance.lang.offlineUser);
             return;
         }
 
@@ -53,15 +49,15 @@ public class GiveCommand extends SubCommand {
                 target.getPlayer().getInventory().addItem(ItemBuilder.makeItem(Main.instance.config.passwordChestItem));
                 break;
             default:
-                api.getMessageManager().sendMessage(commandSender, Main.instance.lang.invalidItem);
+                api.getMessageManager().sendMessage(user, Main.instance.lang.invalidItem);
                 break;
         }
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, List<String> args) {
+    public List<String> onTabComplete(dev.lightdream.rustcore.database.User user, List<String> args) {
         if (args.size() == 1) {
-            return Arrays.asList("CubBoard", "BuildHammer","RecyclingTable", "PasswordChest");
+            return Arrays.asList("CubBoard", "BuildHammer", "RecyclingTable", "PasswordChest");
         }
         return null;
     }

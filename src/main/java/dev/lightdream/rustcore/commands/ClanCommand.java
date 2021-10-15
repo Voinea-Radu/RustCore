@@ -1,32 +1,29 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.commands.SubCommand;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.Clan;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.command.CommandSender;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class ClanCommand extends SubCommand {
     public ClanCommand(IAPI api) {
-        super(api, Collections.singletonList("clan"), "", "", true, false, "[create/join//invite/kick/giveOwner//leave/delete/info] [name//user]");
+        super(api, "clan", true, false, "[create/join//invite/kick/giveOwner//leave/delete/info] [name//user]");
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void execute(CommandSender sender, List<String> args) {
+    public void execute(User user, List<String> args) {
         if (args.size() == 0) {
-            sendUsage(sender);
+            sendUsage(user);
             return;
         }
 
         String command = args.get(0);
-        User user = Main.instance.databaseManager.getUser(sender);
         String name;
         String targetName;
         User target;
@@ -34,14 +31,14 @@ public class ClanCommand extends SubCommand {
         Clan targetClan;
 
         if (user == null) {
-            sendUsage(sender);
+            sendUsage(user);
             return;
         }
 
         switch (command.toLowerCase()) {
             case "create":
                 if (args.size() != 2) {
-                    sendUsage(sender);
+                    sendUsage(user);
                     return;
                 }
 
@@ -63,7 +60,7 @@ public class ClanCommand extends SubCommand {
                 break;
             case "join":
                 if (args.size() != 2) {
-                    sendUsage(sender);
+                    sendUsage(user);
                     return;
                 }
 
@@ -84,7 +81,7 @@ public class ClanCommand extends SubCommand {
                 break;
             case "invite":
                 if (args.size() != 2) {
-                    sendUsage(sender);
+                    sendUsage(user);
                     return;
                 }
 
@@ -111,7 +108,7 @@ public class ClanCommand extends SubCommand {
                 break;
             case "kick":
                 if (args.size() != 2) {
-                    sendUsage(sender);
+                    sendUsage(user);
                     return;
                 }
 
@@ -140,7 +137,7 @@ public class ClanCommand extends SubCommand {
                 break;
             case "giveowner":
                 if (args.size() != 2) {
-                    sendUsage(sender);
+                    sendUsage(user);
                     return;
                 }
 
@@ -219,13 +216,13 @@ public class ClanCommand extends SubCommand {
                 }}));
                 break;
             default:
-                sendUsage(sender);
+                sendUsage(user);
                 break;
         }
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, List<String> list) {
+    public List<String> onTabComplete(User user, List<String> list) {
         return null;
     }
 }

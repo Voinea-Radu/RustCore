@@ -40,6 +40,13 @@ public class Lang extends dev.lightdream.api.configs.Lang {
     public String speedChanged = "Speed changed";
     public String banMessage = "You have been banned for the reason %reason% for %duration%";
     public String youAreMuted = "You are muted";
+    public String weatherChanged = "Weather changed";
+    public String timeChanged = "Time changed";
+    public String healed = "Healed";
+    public String fed = "Fed";
+    public String kicked = "Kicked";
+    public String kickedMessage = "You have been kicked";
+    public String teleported = "Teleported";
 
 
 }

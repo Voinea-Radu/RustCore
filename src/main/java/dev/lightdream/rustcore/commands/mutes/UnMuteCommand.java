@@ -1,28 +1,25 @@
 package dev.lightdream.rustcore.commands.mutes;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.commands.SubCommand;
 import dev.lightdream.rustcore.Main;
+import dev.lightdream.rustcore.commands.SubCommand;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 
 public class UnMuteCommand extends SubCommand {
     public UnMuteCommand(@NotNull IAPI api) {
-        super(api, Collections.singletonList("unmute"), "", "", true, false, "[player]");
+        super(api, "unmute", true, false, "[player]");
     }
 
     @Override
-    public void execute(CommandSender commandSender, List<String> args) {
+    public void execute(User user, List<String> args) {
         if (args.size() != 1) {
-            sendUsage(commandSender);
+            sendUsage(user);
             return;
         }
-
-        User user = Main.instance.databaseManager.getUser(commandSender);
 
         if (user == null) {
             return;
@@ -45,7 +42,7 @@ public class UnMuteCommand extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, List<String> list) {
+    public List<String> onTabComplete(User user, List<String> list) {
         return null;
     }
 }

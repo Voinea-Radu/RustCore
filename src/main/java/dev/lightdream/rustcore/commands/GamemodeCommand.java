@@ -1,7 +1,6 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.commands.SubCommand;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.GameMode;
@@ -9,32 +8,28 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class GamemodeCommand extends SubCommand {
     public GamemodeCommand(@NotNull IAPI api) {
-        super(api, Collections.singletonList("gm"), "", "", true, false, "[0/1/2/3]");
+        super(api, "gm", true, false, "[0/1/2/3]");
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void execute(CommandSender commandSender, List<String> args) {
-
-        if(args.size()!=1){
-            sendUsage(commandSender);
+    public void execute(User user, List<String> args) {
+        if (args.size() != 1) {
+            sendUsage(user);
             return;
         }
 
         String gamemode = args.get(0);
 
-        User user = Main.instance.databaseManager.getUser(commandSender);
-
         if (user == null) {
             return;
         }
 
-        switch (gamemode){
+        switch (gamemode) {
             case "1":
             case "c":
                 user.getPlayer().setGameMode(GameMode.CREATIVE);
@@ -52,7 +47,7 @@ public class GamemodeCommand extends SubCommand {
                 user.getPlayer().setGameMode(GameMode.SPECTATOR);
                 break;
             default:
-                sendUsage(commandSender);
+                sendUsage(user);
                 return;
         }
 
@@ -60,7 +55,7 @@ public class GamemodeCommand extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, List<String> list) {
+    public List<String> onTabComplete(User user, List<String> list) {
         return new ArrayList<>();
     }
 }

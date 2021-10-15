@@ -1,30 +1,25 @@
 package dev.lightdream.rustcore.commands.bans;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.commands.SubCommand;
 import dev.lightdream.rustcore.Main;
-import dev.lightdream.rustcore.database.Ban;
+import dev.lightdream.rustcore.commands.SubCommand;
 import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.utils.Utils;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 
 public class BanCommand extends SubCommand {
     public BanCommand(@NotNull IAPI api) {
-        super(api, Collections.singletonList("ban"), "", "", true, false, "[player] [period] [reason]");
+        super(api, "ban", true, false, "[player] [period] [reason]");
     }
 
     @Override
-    public void execute(CommandSender commandSender, List<String> args) {
+    public void execute(User user, List<String> args) {
         if (args.size() < 3) {
-            sendUsage(commandSender);
+            sendUsage(user);
             return;
         }
-
-        User user = Main.instance.databaseManager.getUser(commandSender);
 
         if (user == null) {
             return;
@@ -60,7 +55,7 @@ public class BanCommand extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, List<String> list) {
+    public List<String> onTabComplete(User user, List<String> list) {
         return null;
     }
 }

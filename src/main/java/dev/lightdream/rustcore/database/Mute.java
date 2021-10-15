@@ -29,7 +29,8 @@ public class Mute extends EditableDatabaseEntry {
         save();
     }
 
-    public Mute(){
+    @SuppressWarnings("unused")
+    public Mute() {
         super(Main.instance);
     }
 

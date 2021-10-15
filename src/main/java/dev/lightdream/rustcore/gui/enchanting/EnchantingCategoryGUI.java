@@ -23,8 +23,8 @@ import java.util.List;
 
 public class EnchantingCategoryGUI extends GUI {
 
-    private ItemStack item;
     private final Enchant enchant;
+    private ItemStack item;
     private int index = -1;
 
     public EnchantingCategoryGUI(IAPI api, ItemStack item, Enchant enchant) {

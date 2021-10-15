@@ -8,16 +8,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GodCommand extends SubCommand {
-    public GodCommand(@NotNull IAPI api) {
-        super(api, "god", true, false, "");
+public class FeedCommand extends SubCommand {
+    public FeedCommand(@NotNull IAPI api) {
+        super(api, "feed", true, false, "");
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void execute(User user, List<String> list) {
-        user.god = !user.god;
-        Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.godToggled);
+        user.getPlayer().setSaturation(20);
+        user.getPlayer().setFoodLevel(20);
 
+        api.getMessageManager().sendMessage(user, Main.instance.lang.fed);
     }
 
     @Override
