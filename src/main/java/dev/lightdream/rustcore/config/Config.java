@@ -243,5 +243,6 @@ public class Config extends dev.lightdream.api.configs.Config {
     );
 
     public int codeLength = 5;
+    public int babyModeTime = 60*30;
 
 }

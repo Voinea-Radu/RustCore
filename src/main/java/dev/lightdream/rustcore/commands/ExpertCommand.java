@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GodCommand extends SubCommand {
-    public GodCommand(@NotNull IAPI api) {
-        super(api, "god", true, false, "");
+public class ExpertCommand extends SubCommand {
+    public ExpertCommand(@NotNull IAPI api) {
+        super(api, "expert", true, false, "");
     }
 
     @Override
     public void execute(User user, List<String> list) {
-        user.setGod(!user.god);
-        Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.godToggled);
+        user.setBabyGod(false);
+        user.sendMessage(api, Main.instance.lang.expertMode);
     }
 
     @Override

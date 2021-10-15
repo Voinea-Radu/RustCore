@@ -27,16 +27,23 @@ public class User extends dev.lightdream.api.databases.User {
     public boolean vanished;
     @DatabaseField(columnName = "god")
     public boolean god;
+    @DatabaseField(columnName = "baby_god")
+    public boolean babyGod;
     @DatabaseField(columnName = "ip", dataType = DataType.SERIALIZABLE)
     public HashSet<String> ips;
+    @DatabaseField(columnName = "creation_date")
+    public Long creationDate;
+
     private int recipeProgress = 0;
 
     public User(UUID uuid, String name, String lang, String ip) {
         super(Main.instance, uuid, name, lang);
         this.vanished = false;
         this.god = false;
+        this.babyGod = true;
         this.ips = new HashSet<>();
         this.ips.add(ip);
+        this.creationDate = System.currentTimeMillis();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -84,7 +91,6 @@ public class User extends dev.lightdream.api.databases.User {
 
     @SuppressWarnings("ConstantConditions")
     public void addRecipe(String recipeID) {
-
         AtomicInteger max = new AtomicInteger();
 
         Main.instance.config.maxNumberOfCrafts.forEach((perm, number) -> {
@@ -157,6 +163,7 @@ public class User extends dev.lightdream.api.databases.User {
             }
             getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
         }
+        save();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -199,5 +206,15 @@ public class User extends dev.lightdream.api.databases.User {
 
     public Mute getMute() {
         return Main.instance.databaseManager.getMute(this);
+    }
+
+    public void setGod(boolean god){
+        this.god = god;
+        save();
+    }
+
+    public void setBabyGod(boolean god){
+        this.babyGod =god;
+        save();
     }
 }

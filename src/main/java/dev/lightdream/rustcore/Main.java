@@ -12,6 +12,7 @@ import dev.lightdream.rustcore.commands.bans.UnbanCommand;
 import dev.lightdream.rustcore.commands.mutes.MuteCommand;
 import dev.lightdream.rustcore.commands.mutes.UnMuteCommand;
 import dev.lightdream.rustcore.config.Config;
+import dev.lightdream.rustcore.config.Data;
 import dev.lightdream.rustcore.config.Lang;
 import dev.lightdream.rustcore.managers.DatabaseManager;
 import dev.lightdream.rustcore.managers.EventManager;
@@ -29,6 +30,7 @@ public final class Main extends LightDreamPlugin {
     //Settings
     public Config config;
     public Lang lang;
+    public Data data;
 
     //Managers
     public DatabaseManager databaseManager;
@@ -56,11 +58,12 @@ public final class Main extends LightDreamPlugin {
         baseConfig = config;
         lang = fileManager.load(Lang.class, fileManager.getFile(baseConfig.baseLang));
         baseLang = lang;
+        data = fileManager.load(Data.class);
     }
 
     @Override
     public void disable() {
-
+        fileManager.save(data);
     }
 
     @Override

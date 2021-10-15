@@ -44,6 +44,10 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         return getAll(CubBoard.class).stream().filter(cubBoard -> cubBoard.id == id).findFirst().orElse(null);
     }
 
+    public boolean userExists(UUID uuid){
+        return getAll(User.class).stream().anyMatch(user -> user.uuid.equals(uuid));
+    }
+
     public @NotNull User getUser(@NotNull UUID uuid, String ip) {
         Optional<User> optionalUser = getAll(User.class).stream().filter(user -> user.uuid.equals(uuid)).findFirst();
 

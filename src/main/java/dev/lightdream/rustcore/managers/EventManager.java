@@ -1,6 +1,7 @@
 package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.dto.Item;
+import dev.lightdream.api.utils.ItemBuilder;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
@@ -8,6 +9,7 @@ import dev.lightdream.rustcore.managers.events.*;
 import dev.lightdream.rustcore.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -85,5 +87,14 @@ public class EventManager implements Listener {
         event.setCancelled(true);
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onFirstTimeJoin(PlayerJoinEvent event) {
+        if (Main.instance.databaseManager.userExists(event.getPlayer().getUniqueId())) {
+            return;
+        }
 
+        for (String s : Main.instance.data.startKit) {
+            event.getPlayer().getInventory().addItem(ItemBuilder.deserialize(s));
+        }
+    }
 }

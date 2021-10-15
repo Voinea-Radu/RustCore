@@ -24,6 +24,7 @@ public class ScheduleManager {
         registerBuildHammerPreview();
         registerCubBoardProcess();
         registerCraftingProcess();
+        registerBabyGodDisabler();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -98,6 +99,15 @@ public class ScheduleManager {
                 user.processRecipe();
             }
         }, 0, 20);
+    }
+
+    private void registerBabyGodDisabler() {
+        Bukkit.getScheduler().runTaskTimer(plugin, () -> Bukkit.getOnlinePlayers().forEach(player -> {
+            User user = Main.instance.databaseManager.getUser(player);
+            if (System.currentTimeMillis() - user.creationDate > Main.instance.config.babyModeTime * 1000L) {
+                user.setBabyGod(false);
+            }
+        }), 0, 60 * 20);
     }
 
 }

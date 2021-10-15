@@ -47,6 +47,8 @@ public class Lang extends dev.lightdream.api.configs.Lang {
     public String kicked = "Kicked";
     public String kickedMessage = "You have been kicked";
     public String teleported = "Teleported";
+    public String kitSet = "Kit Set";
+    public String expertMode = "Expert mode enabled";
 
 
 }
