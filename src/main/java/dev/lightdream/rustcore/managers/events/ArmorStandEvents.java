@@ -21,7 +21,7 @@ public class ArmorStandEvents implements Listener {
 
     @SuppressWarnings("ConstantConditions")
     @EventHandler
-    public void foo(EntityDamageByEntityEvent event) {
+    public void onArmourStandInteract(EntityDamageByEntityEvent event) {
 
         Entity damager = event.getDamager();
         Entity damaged = event.getEntity();

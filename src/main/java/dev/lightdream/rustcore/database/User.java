@@ -33,6 +33,8 @@ public class User extends dev.lightdream.api.databases.User {
     public HashSet<String> ips;
     @DatabaseField(columnName = "creation_date")
     public Long creationDate;
+    @DatabaseField(columnName = "rank")
+    public int rank;
 
     private int recipeProgress = 0;
 
@@ -44,6 +46,7 @@ public class User extends dev.lightdream.api.databases.User {
         this.ips = new HashSet<>();
         this.ips.add(ip);
         this.creationDate = System.currentTimeMillis();
+        this.rank = 1000;
     }
 
     @SuppressWarnings("ConstantConditions")

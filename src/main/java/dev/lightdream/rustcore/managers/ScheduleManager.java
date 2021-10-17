@@ -4,14 +4,19 @@ import dev.lightdream.api.dto.Item;
 import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.api.utils.Utils;
 import dev.lightdream.rustcore.Main;
+import dev.lightdream.rustcore.database.BigFurnace;
 import dev.lightdream.rustcore.database.CubBoard;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import xyz.xenondevs.particle.ParticleBuilder;
 import xyz.xenondevs.particle.ParticleEffect;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -25,6 +30,7 @@ public class ScheduleManager {
         registerCubBoardProcess();
         registerCraftingProcess();
         registerBabyGodDisabler();
+        registerBigFurnaces();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -108,6 +114,25 @@ public class ScheduleManager {
                 user.setBabyGod(false);
             }
         }), 0, 60 * 20);
+    }
+
+    private void registerBigFurnaces(){
+        Bukkit.getScheduler().runTaskTimer(plugin, () -> Bukkit.getOnlinePlayers().forEach(player -> {
+            List<BigFurnace> toRemove = new ArrayList<>();
+            plugin.databaseManager.getAll(BigFurnace.class).forEach(bigFurnace -> {
+                if(!(bigFurnace.location.getBlock().getState() instanceof  Furnace)){
+                    toRemove.add(bigFurnace);
+                    return;
+                }
+                Furnace furnace = (Furnace) bigFurnace.location.getBlock().getState();
+                if (furnace.getCookTime() < 200) {
+                    furnace.setCookTime((short) (furnace.getCookTime() + 10));
+                    furnace.update();
+                }
+            });
+            toRemove.forEach(BigFurnace::delete);
+        }), 0, 10);
+
     }
 
 }

@@ -24,6 +24,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         setup(Clan.class);
         setup(Ban.class);
         setup(Mute.class);
+        setup(BigFurnace.class);
     }
 
     public CubBoard getCupBoard(PluginLocation location) {
@@ -44,7 +45,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         return getAll(CubBoard.class).stream().filter(cubBoard -> cubBoard.id == id).findFirst().orElse(null);
     }
 
-    public boolean userExists(UUID uuid){
+    public boolean userExists(UUID uuid) {
         return getAll(User.class).stream().anyMatch(user -> user.uuid.equals(uuid));
     }
 
@@ -159,6 +160,10 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
             }
             return mute.user.equals(user);
         }).findFirst().orElse(null);
+    }
+
+    public @Nullable BigFurnace getBigFurnace(PluginLocation location) {
+        return getAll(BigFurnace.class).stream().filter(bigFurnace -> bigFurnace.location.equals(location)).findFirst().orElse(null);
     }
 
 

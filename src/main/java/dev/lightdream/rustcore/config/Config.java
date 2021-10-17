@@ -20,6 +20,7 @@ public class Config extends dev.lightdream.api.configs.Config {
     public int cubBoardProtectionRadius = 20;
     public Item cubBoardItem = new Item(XMaterial.SPONGE, 1, "CupBoard", Arrays.asList("Place to create a 40x40 area of protection"));
     public Item buildHammerItem = new Item(XMaterial.IRON_AXE, 1, "Building Hammer", Arrays.asList("Right click to preview the build protection"));
+    public Item bigFurnace = new Item(XMaterial.FURNACE, 1, "Big Furnace", new ArrayList<>());
 
     public GUIConfig cubBoardGUI = new GUIConfig(
             "cub_board_gui",
@@ -243,6 +244,6 @@ public class Config extends dev.lightdream.api.configs.Config {
     );
 
     public int codeLength = 5;
-    public int babyModeTime = 60*30;
+    public int babyModeTime = 60 * 30;
 
 }

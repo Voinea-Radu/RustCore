@@ -11,7 +11,7 @@ import java.util.List;
 
 public class GiveCommand extends SubCommand {
     public GiveCommand(@NotNull IAPI api) {
-        super(api, "give", false, false, "[CubBoard/BuildHammer/RecyclingTable/PasswordChest] [player]");
+        super(api, "give", false, false, "[CubBoard/BuildHammer/RecyclingTable/PasswordChest/BigFurnace] [player]");
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -48,6 +48,9 @@ public class GiveCommand extends SubCommand {
             case "passwordchest":
                 target.getPlayer().getInventory().addItem(ItemBuilder.makeItem(Main.instance.config.passwordChestItem));
                 break;
+            case "bigfurnace":
+                target.getPlayer().getInventory().addItem(ItemBuilder.makeItem(Main.instance.config.bigFurnace));
+                break;
             default:
                 api.getMessageManager().sendMessage(user, Main.instance.lang.invalidItem);
                 break;
@@ -57,7 +60,7 @@ public class GiveCommand extends SubCommand {
     @Override
     public List<String> onTabComplete(dev.lightdream.rustcore.database.User user, List<String> args) {
         if (args.size() == 1) {
-            return Arrays.asList("CubBoard", "BuildHammer", "RecyclingTable", "PasswordChest");
+            return Arrays.asList("CubBoard", "BuildHammer", "RecyclingTable", "PasswordChest", "BigFurnace");
         }
         return null;
     }

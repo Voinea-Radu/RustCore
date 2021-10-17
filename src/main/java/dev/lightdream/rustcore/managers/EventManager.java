@@ -32,6 +32,7 @@ public class EventManager implements Listener {
         plugin.getServer().getPluginManager().registerEvents(new RecyclingEvents(plugin), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ArmorStandEvents(plugin), plugin);
         plugin.getServer().getPluginManager().registerEvents(new PasswordChestEvents(plugin), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new BigFurnaceEvents(plugin), plugin);
     }
 
     @SuppressWarnings("UnnecessaryReturnStatement")

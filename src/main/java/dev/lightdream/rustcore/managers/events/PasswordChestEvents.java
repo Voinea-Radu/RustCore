@@ -27,7 +27,7 @@ public class PasswordChestEvents implements Listener {
     public void onPasswordChestPlace(BlockPlaceEvent event) {
         Item item = new Item(event.getItemInHand());
 
-        if (!item.equals(plugin.config.passwordChestItem)) {
+        if (!item.equals(plugin.config.passwordChestItem, false)) {
             return;
         }
 

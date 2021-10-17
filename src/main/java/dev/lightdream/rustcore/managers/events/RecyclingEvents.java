@@ -59,7 +59,7 @@ public class RecyclingEvents implements Listener {
             return;
         }
 
-        new RecyclingTable(Main.instance, pluginLocation);
+        new RecyclingTable(pluginLocation);
 
 
     }
