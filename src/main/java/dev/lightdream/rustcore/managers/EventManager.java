@@ -1,6 +1,7 @@
 package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.dto.Item;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.api.utils.ItemBuilder;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
@@ -84,7 +85,7 @@ public class EventManager implements Listener {
             return;
         }
 
-        Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.youAreMuted);
+        MessageManager.sendMessage(user, Main.instance.lang.youAreMuted);
         event.setCancelled(true);
     }
 

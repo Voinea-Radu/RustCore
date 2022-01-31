@@ -9,10 +9,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        onlyForPlayers = true,
+        command = "setstartkit"
+)
 public class SetStartKitCommand extends SubCommand {
     public SetStartKitCommand(@NotNull IAPI api) {
-        super(api, "setstartkit", true, false, "");
+        super(api);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -26,7 +30,7 @@ public class SetStartKitCommand extends SubCommand {
         }
 
         Main.instance.data.startKit = output;
-        user.sendMessage(api, Main.instance.lang.kitSet);
+        user.sendMessage(Main.instance.lang.kitSet);
     }
 
     @Override

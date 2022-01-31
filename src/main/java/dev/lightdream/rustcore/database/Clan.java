@@ -1,26 +1,23 @@
 package dev.lightdream.rustcore.database;
 
-import dev.lightdream.api.databases.EditableDatabaseEntry;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.api.utils.MessageBuilder;
-import dev.lightdream.libs.j256.field.DataType;
-import dev.lightdream.libs.j256.field.DatabaseField;
-import dev.lightdream.libs.j256.table.DatabaseTable;
+import dev.lightdream.databasemanager.annotations.database.DatabaseField;
+import dev.lightdream.databasemanager.annotations.database.DatabaseTable;
+import dev.lightdream.databasemanager.dto.DatabaseEntry;
 import dev.lightdream.rustcore.Main;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-@DatabaseTable(tableName = "clans")
-public class Clan extends EditableDatabaseEntry {
+@DatabaseTable(table = "clans")
+public class Clan extends DatabaseEntry {
 
-    @SuppressWarnings("unused")
-    @DatabaseField(columnName = "id", generatedId = true, canBeNull = false)
-    public int id;
-    @DatabaseField(columnName = "members", dataType = DataType.SERIALIZABLE)
+    @DatabaseField(columnName = "members")
     public HashSet<Integer> members = new HashSet<>();
-    @DatabaseField(columnName = "invites", dataType = DataType.SERIALIZABLE)
+    @DatabaseField(columnName = "invites")
     public HashSet<Integer> invites = new HashSet<>();
-    @DatabaseField(columnName = "owner", foreign = true)
+    @DatabaseField(columnName = "owner")
     public User owner;
     @DatabaseField(columnName = "tag")
     public String name;
@@ -31,7 +28,7 @@ public class Clan extends EditableDatabaseEntry {
         this.name = name;
         this.members.add(owner.id);
         save();
-        Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.clanCleared);
+        MessageManager.sendMessage(user, Main.instance.lang.clanCleared);
     }
 
     @SuppressWarnings("unused")
@@ -43,7 +40,7 @@ public class Clan extends EditableDatabaseEntry {
     @SuppressWarnings("unused")
     public void changeName(String name) {
         this.name = name;
-        Main.instance.getMessageManager().sendMessage(owner, Main.instance.lang.nameChanged);
+        MessageManager.sendMessage(owner, Main.instance.lang.nameChanged);
         save();
     }
 
@@ -57,10 +54,10 @@ public class Clan extends EditableDatabaseEntry {
 
     public void invite(User user) {
         this.invites.add(user.id);
-        Main.instance.getMessageManager().sendMessage(user, new MessageBuilder(Main.instance.lang.invitedClan).addPlaceholders(new HashMap<String, String>() {{
+        MessageManager.sendMessage(user, new MessageBuilder(Main.instance.lang.invitedClan).addPlaceholders(new HashMap<String, String>() {{
             put("clan_name", name);
         }}));
-        Main.instance.getMessageManager().sendMessage(owner, Main.instance.lang.clanInviteSent);
+        MessageManager.sendMessage(owner, Main.instance.lang.clanInviteSent);
         save();
     }
 
@@ -87,15 +84,11 @@ public class Clan extends EditableDatabaseEntry {
             if (member == null || !member.isOnline()) {
                 return;
             }
-            Main.instance.getMessageManager().sendMessage(member, message);
+            MessageManager.sendMessage(member, message);
         });
         if (owner.isOnline()) {
-            Main.instance.getMessageManager().sendMessage(owner, message);
+            MessageManager.sendMessage(owner, message);
         }
     }
 
-    @Override
-    public Integer getID() {
-        return id;
-    }
 }

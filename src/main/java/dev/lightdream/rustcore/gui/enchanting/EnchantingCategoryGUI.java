@@ -1,14 +1,15 @@
 package dev.lightdream.rustcore.gui.enchanting;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.dto.GUIConfig;
-import dev.lightdream.api.dto.GUIItem;
+import dev.lightdream.api.dto.gui.GUIConfig;
+import dev.lightdream.api.dto.gui.GUIItem;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.api.utils.Utils;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.dto.Enchant;
+import dev.lightdream.rustcore.gui.WithArgs;
 import dev.lightdream.rustcore.gui.functions.GUIFunctions;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
@@ -21,20 +22,20 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 
-public class EnchantingCategoryGUI extends GUI {
+public class EnchantingCategoryGUI extends GUI  implements WithArgs {
 
     private final Enchant enchant;
     private ItemStack item;
     private int index = -1;
 
-    public EnchantingCategoryGUI(IAPI api, ItemStack item, Enchant enchant) {
-        super(api);
+    public EnchantingCategoryGUI(IAPI api, User user,ItemStack item, Enchant enchant) {
+        super(api,user);
         this.item = item;
         this.enchant = enchant;
     }
 
     @Override
-    public String parse(String s, Player player) {
+    public String parse(String s, String s1, Integer integer) {
         if (index < 0 || index >= enchant.levels.size()) {
             return s;
         }
@@ -53,7 +54,7 @@ public class EnchantingCategoryGUI extends GUI {
 
     @Override
     public InventoryProvider getProvider() {
-        return new EnchantingCategoryGUI(api, item, enchant);
+        return new EnchantingCategoryGUI(api, (User) getUser(), item, enchant);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class EnchantingCategoryGUI extends GUI {
     }
 
     @Override
-    public boolean canAddItem(GUIItem guiItem, String s) {
+    public boolean canAddItem(GUIItem guiItem, String s, Integer integer) {
         if (guiItem.repeated) {
             index++;
             return index < enchant.levels.size();
@@ -84,7 +85,7 @@ public class EnchantingCategoryGUI extends GUI {
             User user = Main.instance.databaseManager.getUser(e.getWhoClicked());
             user.getPlayer().getInventory().addItem(item);
             item = null;
-            new EnchantingGUI(api, null).open(user);
+            new EnchantingGUI(api, user,null).open(user);
         }));
     }
 
@@ -111,6 +112,16 @@ public class EnchantingCategoryGUI extends GUI {
     @Override
     public void onPlayerInventoryClick(InventoryClickEvent inventoryClickEvent) {
 
+    }
+
+    @Override
+    public boolean preventClose() {
+        return false;
+    }
+
+    @Override
+    public void changePage(int i) {
+        getInventory().open(getUser().getPlayer(),i);
     }
 
 }

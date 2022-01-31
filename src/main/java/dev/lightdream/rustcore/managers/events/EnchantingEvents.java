@@ -29,7 +29,7 @@ public class EnchantingEvents implements Listener {
         User user = plugin.databaseManager.getUser(event.getPlayer());
 
         event.setCancelled(true);
-        new EnchantingGUI(plugin, null).open(user);
+        new EnchantingGUI(plugin, user,null).open(user);
     }
 
 }

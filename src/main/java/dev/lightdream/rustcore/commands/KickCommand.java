@@ -1,16 +1,22 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "kick",
+        onlyForPlayers = true,
+        usage = "[player]"
+)
 public class KickCommand extends SubCommand {
 
     public KickCommand(@NotNull IAPI api) {
-        super(api, "kick", true, false, "[player]");
+        super(api);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -24,17 +30,17 @@ public class KickCommand extends SubCommand {
         dev.lightdream.api.databases.User target = Main.instance.databaseManager.getUser(args.get(0));
 
         if (target == null) {
-            api.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+            MessageManager.sendMessage(user, Main.instance.lang.invalidUser);
             return;
         }
 
         if (!target.isOnline()) {
-            api.getMessageManager().sendMessage(user, Main.instance.lang.offlineUser);
+            MessageManager.sendMessage(user, Main.instance.lang.offlineUser);
             return;
         }
 
         target.getPlayer().kickPlayer(Main.instance.lang.kickedMessage);
-        user.sendMessage(api, Main.instance.lang.kicked);
+        user.sendMessage(Main.instance.lang.kicked);
     }
 
     @Override

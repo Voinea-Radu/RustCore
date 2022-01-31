@@ -1,9 +1,9 @@
 package dev.lightdream.rustcore.config;
 
-import dev.lightdream.api.dto.GUIConfig;
-import dev.lightdream.api.dto.GUIItem;
 import dev.lightdream.api.dto.Item;
 import dev.lightdream.api.dto.XMaterial;
+import dev.lightdream.api.dto.gui.GUIConfig;
+import dev.lightdream.api.dto.gui.GUIItem;
 import dev.lightdream.rustcore.dto.Enchant;
 import dev.lightdream.rustcore.dto.Recipe;
 import org.bukkit.enchantments.Enchantment;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
-public class Config extends dev.lightdream.api.configs.Config {
+public class Config extends dev.lightdream.api.configs.ApiConfig {
 
     public int cubBoardProtectionRadius = 20;
     public Item cubBoardItem = new Item(XMaterial.SPONGE, 1, "CupBoard", Arrays.asList("Place to create a 40x40 area of protection"));

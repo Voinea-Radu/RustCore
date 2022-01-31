@@ -1,8 +1,8 @@
 package dev.lightdream.rustcore.gui.enchanting;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.dto.GUIConfig;
-import dev.lightdream.api.dto.GUIItem;
+import dev.lightdream.api.dto.gui.GUIConfig;
+import dev.lightdream.api.dto.gui.GUIItem;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
@@ -28,8 +28,8 @@ public class EnchantingGUI extends GUI {
     private ItemStack item;
     private int index = -1;
 
-    public EnchantingGUI(IAPI api, ItemStack item) {
-        super(api);
+    public EnchantingGUI(IAPI api,User user,ItemStack item) {
+        super(api,user);
         this.item = item;
 
         if (item == null) {
@@ -44,7 +44,7 @@ public class EnchantingGUI extends GUI {
     }
 
     @Override
-    public String parse(String s, Player player) {
+    public String parse(String s, String s1, Integer integer) {
 
         if (index < 0 || index >= enchants.size()) {
             return s;
@@ -65,7 +65,7 @@ public class EnchantingGUI extends GUI {
 
     @Override
     public InventoryProvider getProvider() {
-        return new EnchantingGUI(api, item);
+        return new EnchantingGUI(api, (User) getUser(),item);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class EnchantingGUI extends GUI {
     }
 
     @Override
-    public boolean canAddItem(GUIItem guiItem, String s) {
+    public boolean canAddItem(GUIItem guiItem, String s, Integer integer) {
         if (guiItem.repeated) {
             index++;
             return index < enchants.size();
@@ -82,7 +82,6 @@ public class EnchantingGUI extends GUI {
         return true;
     }
 
-    @Override
     public HashMap<Class<?>, Object> getArgs() {
         return new HashMap<Class<?>, Object>() {{
             put(ItemStack.class, item);
@@ -96,7 +95,7 @@ public class EnchantingGUI extends GUI {
             User user = Main.instance.databaseManager.getUser(e.getWhoClicked());
             user.getPlayer().getInventory().addItem(item);
             item = null;
-            new EnchantingGUI(api, null).open(user);
+            new EnchantingGUI(api, user,null).open(user);
         }));
     }
 
@@ -136,8 +135,18 @@ public class EnchantingGUI extends GUI {
 
         event.setCurrentItem(null);
         user.getPlayer().closeInventory();
-        new EnchantingGUI(Main.instance, clickItem).open(user);
+        new EnchantingGUI(Main.instance, user, clickItem).open(user);
         event.setCancelled(true);
+    }
+
+    @Override
+    public boolean preventClose() {
+        return false;
+    }
+
+    @Override
+    public void changePage(int i) {
+        getInventory().open(getUser().getPlayer(),i);
     }
 
 }

@@ -3,9 +3,8 @@ package dev.lightdream.rustcore.database;
 
 import dev.lightdream.api.utils.ItemBuilder;
 import dev.lightdream.api.utils.ScoreBoardUtils;
+import dev.lightdream.databasemanager.annotations.database.DatabaseField;
 import dev.lightdream.libs.fasterxml.annotation.JsonIgnore;
-import dev.lightdream.libs.j256.field.DataType;
-import dev.lightdream.libs.j256.field.DatabaseField;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.dto.Recipe;
 import lombok.NoArgsConstructor;
@@ -29,7 +28,7 @@ public class User extends dev.lightdream.api.databases.User {
     public boolean god;
     @DatabaseField(columnName = "baby_god")
     public boolean babyGod;
-    @DatabaseField(columnName = "ip", dataType = DataType.SERIALIZABLE)
+    @DatabaseField(columnName = "ip")
     public HashSet<String> ips;
     @DatabaseField(columnName = "creation_date")
     public Long creationDate;
@@ -38,8 +37,8 @@ public class User extends dev.lightdream.api.databases.User {
 
     private int recipeProgress = 0;
 
-    public User(UUID uuid, String name, String lang, String ip) {
-        super(Main.instance, uuid, name, lang);
+    public User(UUID uuid, String name, String ip) {
+        super(Main.instance, uuid, name);
         this.vanished = false;
         this.god = false;
         this.babyGod = true;
@@ -145,7 +144,6 @@ public class User extends dev.lightdream.api.databases.User {
                 ", id=" + id +
                 ", uuid=" + uuid +
                 ", name='" + name + '\'' +
-                ", lang='" + lang + '\'' +
                 '}';
     }
 

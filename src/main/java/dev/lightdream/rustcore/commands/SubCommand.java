@@ -9,16 +9,14 @@ import java.util.List;
 
 public abstract class SubCommand extends dev.lightdream.api.commands.SubCommand {
     public SubCommand(@NotNull IAPI api, @NotNull List<String> aliases, @NotNull String description, @NotNull String permission, boolean onlyForPlayers, boolean onlyForConsole, @NotNull String usage) {
-        super(api, aliases, description, permission, onlyForPlayers, onlyForConsole, usage);
+        super(api);
     }
 
-    public SubCommand(@NotNull IAPI api, String alias, boolean onlyForPlayers, boolean onlyForConsole, @NotNull String usage) {
-        super(api, alias, onlyForPlayers, onlyForConsole, usage);
+    public SubCommand(@NotNull IAPI api) {
+        super(api);
     }
 
-    public SubCommand(@NotNull IAPI api, List<String> aliases, boolean onlyForPlayers, boolean onlyForConsole, @NotNull String usage) {
-        super(api, aliases, onlyForPlayers, onlyForConsole, usage);
-    }
+
 
     @Override
     public void execute(User user, List<String> list) {

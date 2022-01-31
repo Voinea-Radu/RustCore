@@ -1,18 +1,24 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.Clan;
 import dev.lightdream.rustcore.database.User;
-import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
 import java.util.List;
 
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command =  "clan",
+        onlyForPlayers = true,
+        usage = "[create/join//invite/kick/giveOwner//leave/delete/info] [name//user]"
+)
 public class ClanCommand extends SubCommand {
     public ClanCommand(IAPI api) {
-        super(api, "clan", true, false, "[create/join//invite/kick/giveOwner//leave/delete/info] [name//user]");
+        super(api);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -47,12 +53,12 @@ public class ClanCommand extends SubCommand {
                 Clan c2 = Main.instance.databaseManager.getClan(name);
 
                 if (c1 != null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.alreadyInClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.alreadyInClan);
                     return;
                 }
 
                 if (c2 != null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.clanAlreadyExists);
+                    MessageManager.sendMessage(user, Main.instance.lang.clanAlreadyExists);
                     return;
                 }
 
@@ -68,7 +74,7 @@ public class ClanCommand extends SubCommand {
                 clan = Main.instance.databaseManager.getClan(name);
 
                 if (clan == null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.invalidClan);
                     return;
                 }
 
@@ -77,7 +83,7 @@ public class ClanCommand extends SubCommand {
                     return;
                 }
 
-                Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notInvited);
+                MessageManager.sendMessage(user, Main.instance.lang.notInvited);
                 break;
             case "invite":
                 if (args.size() != 2) {
@@ -90,17 +96,17 @@ public class ClanCommand extends SubCommand {
                 clan = user.getClan();
 
                 if (clan == null || !clan.owner.equals(user)) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notOwnClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.notOwnClan);
                     return;
                 }
 
                 if (target == null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+                    MessageManager.sendMessage(user, Main.instance.lang.invalidUser);
                     return;
                 }
 
                 if (target.getClan() != null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.targetAlreadyInClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.targetAlreadyInClan);
                     return;
                 }
 
@@ -117,19 +123,19 @@ public class ClanCommand extends SubCommand {
                 clan = user.getClan();
 
                 if (clan == null || !clan.owner.equals(user)) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notOwnClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.notOwnClan);
                     return;
                 }
 
                 if (target == null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+                    MessageManager.sendMessage(user, Main.instance.lang.invalidUser);
                     return;
                 }
 
                 targetClan = target.getClan();
 
                 if (clan != targetClan) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notSameClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.notSameClan);
                     return;
                 }
 
@@ -146,19 +152,19 @@ public class ClanCommand extends SubCommand {
                 clan = user.getClan();
 
                 if (clan == null || !clan.owner.equals(user)) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notOwnClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.notOwnClan);
                     return;
                 }
 
                 if (target == null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+                    MessageManager.sendMessage(user, Main.instance.lang.invalidUser);
                     return;
                 }
 
                 targetClan = target.getClan();
 
                 if (clan != targetClan) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notSameClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.notSameClan);
                     return;
                 }
 
@@ -168,12 +174,12 @@ public class ClanCommand extends SubCommand {
                 clan = user.getClan();
 
                 if (clan == null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notInClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.notInClan);
                     return;
                 }
 
                 if (clan.owner.equals(user)) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.mustFirstDelete);
+                    MessageManager.sendMessage(user, Main.instance.lang.mustFirstDelete);
                     return;
                 }
                 clan.leave(user);
@@ -182,12 +188,12 @@ public class ClanCommand extends SubCommand {
                 clan = user.getClan();
 
                 if (clan == null) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notInClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.notInClan);
                     return;
                 }
 
                 if (!clan.owner.equals(user)) {
-                    Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.notOwnClan);
+                    MessageManager.sendMessage(user, Main.instance.lang.notOwnClan);
                     return;
                 }
                 clan.delete();
@@ -208,7 +214,7 @@ public class ClanCommand extends SubCommand {
                 members = new StringBuilder(members.toString().replace(", ,", ""));
 
                 StringBuilder finalMembers = members;
-                Main.instance.getMessageManager().sendMessage(user, new MessageBuilder(Main.instance.lang.clanInfo).addPlaceholders(new HashMap<String, String>() {{
+                MessageManager.sendMessage(user, new MessageBuilder(Main.instance.lang.clanInfo).addPlaceholders(new HashMap<String, String>() {{
                     put("clan_name", clan.name);
                     put("clan_owner", clan.owner.name);
                     put("clan_members", finalMembers.toString());

@@ -1,7 +1,7 @@
 package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.dto.PluginLocation;
+import dev.lightdream.api.dto.location.PluginLocation;
 import dev.lightdream.rustcore.database.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -56,7 +56,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
             return optionalUser.get();
         }
 
-        User user = new User(uuid, Bukkit.getOfflinePlayer(uuid).getName(), api.getSettings().baseLang, ip);
+        User user = new User(uuid, Bukkit.getOfflinePlayer(uuid).getName(), ip);
         save(user);
         return user;
     }

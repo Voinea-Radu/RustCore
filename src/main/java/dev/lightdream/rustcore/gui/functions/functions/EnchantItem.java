@@ -2,6 +2,7 @@ package dev.lightdream.rustcore.gui.functions.functions;
 
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.rustcore.database.User;
+import dev.lightdream.rustcore.gui.WithArgs;
 import dev.lightdream.rustcore.gui.enchanting.EnchantingGUI;
 import dev.lightdream.rustcore.gui.functions.GUIFunction;
 import dev.lightdream.rustcore.utils.Utils;
@@ -32,11 +33,11 @@ public class EnchantItem extends GUIFunction {
 
         Utils.setTotalExperience(user.getPlayer(), Utils.getTotalExperience(user.getPlayer()) - xp);
 
-        ItemStack item = gui.getArg(ItemStack.class).clone();
+        ItemStack item = ((WithArgs) gui).getArg(ItemStack.class).clone();
 
         item.addUnsafeEnchantment(Enchantment.getByName(enchantID), level);
 
-        gui.getArg(ItemStack.class).setAmount(0);
-        new EnchantingGUI(gui.api, item).open(user);
+        ((WithArgs) gui).getArg(ItemStack.class).setAmount(0);
+        new EnchantingGUI(gui.api,user, item).open(user);
     }
 }

@@ -1,11 +1,12 @@
 package dev.lightdream.rustcore.gui;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.dto.GUIConfig;
-import dev.lightdream.api.dto.GUIItem;
+import dev.lightdream.api.dto.gui.GUIConfig;
+import dev.lightdream.api.dto.gui.GUIItem;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
+import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.dto.Recipe;
 import dev.lightdream.rustcore.gui.functions.GUIFunctions;
 import fr.minuskube.inv.content.InventoryContents;
@@ -18,14 +19,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CraftingGUI extends GUI {
+public class CraftingGUI extends GUI implements WithArgs {
 
     private final String category;
     private final List<Recipe> recipes;
     private int index = -1;
 
-    public CraftingGUI(IAPI api, String category) {
-        super(api);
+    public CraftingGUI(IAPI api, User user,String category) {
+        super(api,user);
         this.category = category;
 
         switch (category) {
@@ -54,7 +55,7 @@ public class CraftingGUI extends GUI {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public String parse(String s, Player player) {
+    public String parse(String s, String s1, Integer integer) {
 
         if (index < 0) {
             return s;
@@ -97,7 +98,7 @@ public class CraftingGUI extends GUI {
 
     @Override
     public InventoryProvider getProvider() {
-        return new CraftingGUI(api, category);
+        return new CraftingGUI(api, (User) getUser(),category);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class CraftingGUI extends GUI {
     }
 
     @Override
-    public boolean canAddItem(GUIItem guiItem, String s) {
+    public boolean canAddItem(GUIItem guiItem, String s, Integer integer) {
         if (!guiItem.repeated) {
             return true;
         }
@@ -147,5 +148,15 @@ public class CraftingGUI extends GUI {
     @Override
     public void onPlayerInventoryClick(InventoryClickEvent inventoryClickEvent) {
 
+    }
+
+    @Override
+    public boolean preventClose() {
+        return false;
+    }
+
+    @Override
+    public void changePage(int i) {
+        getInventory().open(getUser().getPlayer(),i);
     }
 }

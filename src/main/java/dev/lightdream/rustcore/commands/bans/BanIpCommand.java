@@ -1,18 +1,23 @@
 package dev.lightdream.rustcore.commands.bans;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.commands.SubCommand;
 import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.utils.Utils;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "banip",
+        onlyForPlayers = true,
+        usage = "[player] [period] [reason]"
+)
 public class BanIpCommand extends SubCommand {
     public BanIpCommand(@NotNull IAPI api) {
-        super(api, "banip", true, false, "[player] [period] [reason]");
+        super(api);
     }
 
     @Override
@@ -29,12 +34,12 @@ public class BanIpCommand extends SubCommand {
         User target = Main.instance.databaseManager.getUser(args.get(0));
 
         if (target == null) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+            MessageManager.sendMessage(user, Main.instance.lang.invalidUser);
             return;
         }
 
         if (target.isBanned()) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.alreadyBanned);
+            MessageManager.sendMessage(user, Main.instance.lang.alreadyBanned);
             return;
         }
 
@@ -47,12 +52,12 @@ public class BanIpCommand extends SubCommand {
 
         Long period = Utils.stringToPeriod(timeString);
         if (period == null) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidTime);
+            MessageManager.sendMessage(user, Main.instance.lang.invalidTime);
             return;
         }
 
         target.ban(user, period, reason.toString(), true);
-        Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.banned);
+        MessageManager.sendMessage(user, Main.instance.lang.banned);
     }
 
     @Override

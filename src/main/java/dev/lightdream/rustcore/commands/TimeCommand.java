@@ -1,15 +1,21 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "time",
+        onlyForPlayers = true,
+        usage = "[ticks]"
+)
 public class TimeCommand extends SubCommand {
     public TimeCommand(@NotNull IAPI api) {
-        super(api, "time", true, false, "[ticks]");
+        super(api);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -24,11 +30,11 @@ public class TimeCommand extends SubCommand {
             int ticks = Integer.parseInt(args.get(0));
             user.getPlayer().getWorld().setTime(ticks);
         } catch (NumberFormatException e) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidNumber);
+            MessageManager.sendMessage(user, Main.instance.lang.invalidNumber);
             return;
         }
 
-        api.getMessageManager().sendMessage(user, Main.instance.lang.timeChanged);
+        MessageManager.sendMessage(user, Main.instance.lang.timeChanged);
     }
 
     @Override

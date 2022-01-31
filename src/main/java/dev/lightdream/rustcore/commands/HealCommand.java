@@ -1,16 +1,20 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "heal",
+        onlyForPlayers = true
+)
 public class HealCommand extends SubCommand {
     public HealCommand(@NotNull IAPI api) {
-        super(api, "heal", true, false, "");
+        super(api);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -20,7 +24,7 @@ public class HealCommand extends SubCommand {
         user.getPlayer().setSaturation(20);
         user.getPlayer().setFoodLevel(20);
 
-        api.getMessageManager().sendMessage(user, Main.instance.lang.healed);
+        MessageManager.sendMessage(user, Main.instance.lang.healed);
     }
 
     @Override

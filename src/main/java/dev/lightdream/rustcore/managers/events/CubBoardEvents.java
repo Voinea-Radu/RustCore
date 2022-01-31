@@ -2,11 +2,13 @@ package dev.lightdream.rustcore.managers.events;
 
 import dev.lightdream.api.databases.User;
 import dev.lightdream.api.dto.Item;
-import dev.lightdream.api.dto.PluginLocation;
+import dev.lightdream.api.dto.location.PluginLocation;
 import dev.lightdream.api.gui.GUI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.api.utils.NbtUtils;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.CubBoard;
+import dev.lightdream.rustcore.gui.WithArgs;
 import dev.lightdream.rustcore.gui.cubBoard.CubBoardGUI;
 import fr.minuskube.inv.SmartInventory;
 import org.bukkit.entity.Player;
@@ -38,7 +40,7 @@ public class CubBoardEvents implements Listener {
 
     @EventHandler
     public void onMaterialDeposit(InventoryClickEvent event) {
-        User user = plugin.databaseManager.getUser((Player) event.getWhoClicked());
+        dev.lightdream.rustcore.database.User user = plugin.databaseManager.getUser((Player) event.getWhoClicked());
         SmartInventory sInventory = Main.instance.inventoryManager.getInventory(user.getPlayer()).orElse(null);
 
         if (sInventory == null) {
@@ -51,7 +53,7 @@ public class CubBoardEvents implements Listener {
             return;
         }
 
-        CubBoard cubBoard = (CubBoard) gui.getArgs().get(CubBoard.class);
+        CubBoard cubBoard = (CubBoard) ((WithArgs) gui).getArgs().get(CubBoard.class);
 
         if (cubBoard == null) {
             return;
@@ -86,7 +88,7 @@ public class CubBoardEvents implements Listener {
         }
 
         event.setCurrentItem(null);
-        new CubBoardGUI(plugin, cubBoard).open(user);
+        new CubBoardGUI(plugin, user, cubBoard).open(user);
     }
 
     @EventHandler
@@ -96,7 +98,7 @@ public class CubBoardEvents implements Listener {
             return;
         }
 
-        User user = plugin.databaseManager.getUser(event.getPlayer());
+        dev.lightdream.rustcore.database.User user = plugin.databaseManager.getUser(event.getPlayer());
 
         if (event.getClickedBlock() == null) {
             return;
@@ -111,12 +113,12 @@ public class CubBoardEvents implements Listener {
         event.setCancelled(true);
 
         if (cubBoard.owners.size() >= Main.instance.config.maxCubBoardMembers) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.maxNumberOfOwners);
+            MessageManager.sendMessage(user, Main.instance.lang.maxNumberOfOwners);
             return;
         }
 
         cubBoard.addOwner(user);
-        new CubBoardGUI(plugin, cubBoard).open(user);
+        new CubBoardGUI(plugin, user, cubBoard).open(user);
     }
 
     @SuppressWarnings("UnnecessaryReturnStatement")

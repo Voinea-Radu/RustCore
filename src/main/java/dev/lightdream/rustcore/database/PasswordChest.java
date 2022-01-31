@@ -1,10 +1,9 @@
 package dev.lightdream.rustcore.database;
 
-import dev.lightdream.api.databases.EditableDatabaseEntry;
-import dev.lightdream.api.dto.PluginLocation;
-import dev.lightdream.libs.j256.field.DataType;
-import dev.lightdream.libs.j256.field.DatabaseField;
-import dev.lightdream.libs.j256.table.DatabaseTable;
+import dev.lightdream.api.dto.location.PluginLocation;
+import dev.lightdream.databasemanager.annotations.database.DatabaseField;
+import dev.lightdream.databasemanager.annotations.database.DatabaseTable;
+import dev.lightdream.databasemanager.dto.DatabaseEntry;
 import dev.lightdream.rustcore.Main;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,15 +11,12 @@ import org.bukkit.block.Chest;
 
 import java.util.HashSet;
 
-@DatabaseTable(tableName = "password_chests")
-public class PasswordChest extends EditableDatabaseEntry {
+@DatabaseTable(table = "password_chests")
+public class PasswordChest extends DatabaseEntry {
 
-    @SuppressWarnings("unused")
-    @DatabaseField(columnName = "id", generatedId = true, canBeNull = false)
-    public int id;
-    @DatabaseField(columnName = "location", dataType = DataType.SERIALIZABLE)
+    @DatabaseField(columnName = "location")
     public PluginLocation location;
-    @DatabaseField(columnName = "active_owners", dataType = DataType.SERIALIZABLE)
+    @DatabaseField(columnName = "active_owners")
     public HashSet<Integer> owners = new HashSet<>();
     @DatabaseField(columnName = "password")
     public String password = "";
@@ -89,10 +85,5 @@ public class PasswordChest extends EditableDatabaseEntry {
 
     public boolean hasPassword() {
         return !this.password.equals("");
-    }
-
-    @Override
-    public Integer getID() {
-        return id;
     }
 }

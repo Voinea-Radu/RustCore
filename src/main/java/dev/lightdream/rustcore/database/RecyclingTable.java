@@ -1,19 +1,15 @@
 package dev.lightdream.rustcore.database;
 
-import dev.lightdream.api.IAPI;
-import dev.lightdream.api.databases.EditableDatabaseEntry;
-import dev.lightdream.api.dto.PluginLocation;
-import dev.lightdream.libs.j256.field.DataType;
-import dev.lightdream.libs.j256.field.DatabaseField;
-import dev.lightdream.libs.j256.table.DatabaseTable;
+import dev.lightdream.api.dto.location.PluginLocation;
+import dev.lightdream.databasemanager.annotations.database.DatabaseField;
+import dev.lightdream.databasemanager.annotations.database.DatabaseTable;
+import dev.lightdream.databasemanager.dto.DatabaseEntry;
 import dev.lightdream.rustcore.Main;
 
-@DatabaseTable(tableName = "recycling_tables")
-public class RecyclingTable extends EditableDatabaseEntry {
+@DatabaseTable(table = "recycling_tables")
+public class RecyclingTable extends DatabaseEntry {
 
-    @DatabaseField(columnName = "id", generatedId = true, canBeNull = false)
-    public int id;
-    @DatabaseField(columnName = "location", dataType = DataType.SERIALIZABLE)
+    @DatabaseField(columnName = "location")
     public PluginLocation location;
 
     public RecyclingTable(PluginLocation location) {
@@ -26,11 +22,6 @@ public class RecyclingTable extends EditableDatabaseEntry {
     public RecyclingTable() {
         super(Main.instance);
         save();
-    }
-
-    @Override
-    public Integer getID() {
-        return id;
     }
 
     @Override

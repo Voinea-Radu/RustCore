@@ -1,17 +1,15 @@
 package dev.lightdream.rustcore.managers;
 
 import dev.lightdream.api.dto.Item;
-import dev.lightdream.api.dto.PluginLocation;
+import dev.lightdream.api.dto.location.PluginLocation;
 import dev.lightdream.api.utils.Utils;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.BigFurnace;
 import dev.lightdream.rustcore.database.CubBoard;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import xyz.xenondevs.particle.ParticleBuilder;
 import xyz.xenondevs.particle.ParticleEffect;
 
@@ -95,7 +93,7 @@ public class ScheduleManager {
     }
 
     private void registerCubBoardProcess() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> plugin.databaseManager.getAllIDs(CubBoard.class).forEach(id -> plugin.databaseManager.getCubBoard(id).process()), 0, 60 * 20);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> plugin.databaseManager.getAll(CubBoard.class).forEach(CubBoard::process), 0, 60 * 20);
     }
 
     private void registerCraftingProcess() {

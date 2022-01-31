@@ -2,16 +2,21 @@ package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.databases.User;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.api.utils.ItemBuilder;
 import dev.lightdream.rustcore.Main;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "give",
+        usage = "[CubBoard/BuildHammer/RecyclingTable/PasswordChest/BigFurnace] [player]"
+)
 public class GiveCommand extends SubCommand {
     public GiveCommand(@NotNull IAPI api) {
-        super(api, "give", false, false, "[CubBoard/BuildHammer/RecyclingTable/PasswordChest/BigFurnace] [player]");
+        super(api);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -26,12 +31,12 @@ public class GiveCommand extends SubCommand {
         User target = Main.instance.databaseManager.getUser(args.get(1));
 
         if (target == null) {
-            api.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+            MessageManager.sendMessage(user, Main.instance.lang.invalidUser);
             return;
         }
 
         if (!target.isOnline()) {
-            api.getMessageManager().sendMessage(user, Main.instance.lang.offlineUser);
+            MessageManager.sendMessage(user, Main.instance.lang.offlineUser);
             return;
         }
 
@@ -52,7 +57,7 @@ public class GiveCommand extends SubCommand {
                 target.getPlayer().getInventory().addItem(ItemBuilder.makeItem(Main.instance.config.bigFurnace));
                 break;
             default:
-                api.getMessageManager().sendMessage(user, Main.instance.lang.invalidItem);
+                MessageManager.sendMessage(user, Main.instance.lang.invalidItem);
                 break;
         }
     }

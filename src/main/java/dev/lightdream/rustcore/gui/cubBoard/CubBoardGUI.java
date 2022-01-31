@@ -1,13 +1,13 @@
 package dev.lightdream.rustcore.gui.cubBoard;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.databases.User;
-import dev.lightdream.api.dto.GUIConfig;
-import dev.lightdream.api.dto.GUIItem;
+import dev.lightdream.api.dto.gui.GUIConfig;
+import dev.lightdream.api.dto.gui.GUIItem;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.CubBoard;
+import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.gui.functions.GUIFunctions;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
@@ -22,16 +22,15 @@ public class CubBoardGUI extends GUI {
 
     private final CubBoard cubBoard;
 
-    public CubBoardGUI(IAPI api, CubBoard cubBoard) {
-        super(api);
+    public CubBoardGUI(IAPI api, User user, CubBoard cubBoard) {
+        super(api,user);
         this.cubBoard = cubBoard;
     }
 
     @Override
-    public String parse(String s, Player player) {
-        User user = Main.instance.databaseManager.getUser(player);
+    public String parse(String s, String s1, Integer integer) {
         return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
-            put("player_name", user.name);
+            put("player_name", CubBoardGUI.super.getUser().name);
             put("wood_current_amount", String.valueOf(cubBoard.wood));
             put("cobblestone_current_amount", String.valueOf(cubBoard.cobblestone));
             put("iron_current_amount", String.valueOf(cubBoard.iron));
@@ -47,7 +46,7 @@ public class CubBoardGUI extends GUI {
 
     @Override
     public InventoryProvider getProvider() {
-        return new CubBoardGUI(api, cubBoard);
+        return new CubBoardGUI(api, (User) getUser(), cubBoard);
     }
 
     @Override
@@ -56,11 +55,10 @@ public class CubBoardGUI extends GUI {
     }
 
     @Override
-    public boolean canAddItem(GUIItem guiItem, String s) {
+    public boolean canAddItem(GUIItem guiItem, String s, Integer integer) {
         return true;
     }
 
-    @Override
     public HashMap<Class<?>, Object> getArgs() {
         return new HashMap<Class<?>, Object>() {{
             put(CubBoard.class, cubBoard);
@@ -90,5 +88,15 @@ public class CubBoardGUI extends GUI {
     @Override
     public void onPlayerInventoryClick(InventoryClickEvent inventoryClickEvent) {
 
+    }
+
+    @Override
+    public boolean preventClose() {
+        return false;
+    }
+
+    @Override
+    public void changePage(int i) {
+        getInventory().open(getUser().getPlayer(), i);
     }
 }

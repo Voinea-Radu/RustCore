@@ -3,6 +3,7 @@ package dev.lightdream.rustcore.gui.functions.functions;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
+import dev.lightdream.rustcore.gui.WithArgs;
 import dev.lightdream.rustcore.gui.enchanting.EnchantingCategoryGUI;
 import dev.lightdream.rustcore.gui.functions.GUIFunction;
 import dev.lightdream.rustcore.utils.Utils;
@@ -20,8 +21,8 @@ public class OpenGUIWithArgs extends GUIFunction {
 
         switch (menu) {
             case "enchanting_category_gui":
-                ItemStack item = gui.getArg(ItemStack.class).clone();
-                gui.getArg(ItemStack.class).setAmount(0);
+                ItemStack item = ((WithArgs) gui).getArg(ItemStack.class).clone();
+                ((WithArgs) gui).getArg(ItemStack.class).setAmount(0);
 
                 if (item == null) {
                     break;
@@ -30,7 +31,7 @@ public class OpenGUIWithArgs extends GUIFunction {
                     break;
                 }
 
-                new EnchantingCategoryGUI(Main.instance, item, Utils.getEnchantByID(enchantId)).open(user);
+                new EnchantingCategoryGUI(Main.instance, user,item, Utils.getEnchantByID(enchantId)).open(user);
                 break;
         }
     }

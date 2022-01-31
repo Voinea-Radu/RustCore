@@ -1,18 +1,23 @@
 package dev.lightdream.rustcore.commands.mutes;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.commands.SubCommand;
 import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.utils.Utils;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "mute",
+        onlyForPlayers = true,
+        usage = "[player] [period] [reason]"
+)
 public class MuteCommand extends SubCommand {
     public MuteCommand(@NotNull IAPI api) {
-        super(api, "mute", true, false, "[player] [period] [reason]");
+        super(api);
     }
 
     @Override
@@ -29,12 +34,12 @@ public class MuteCommand extends SubCommand {
         User target = Main.instance.databaseManager.getUser(args.get(0));
 
         if (target == null) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidUser);
+            MessageManager.sendMessage(user, Main.instance.lang.invalidUser);
             return;
         }
 
         if (target.isMuted()) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.alreadyMuted);
+            MessageManager.sendMessage(user, Main.instance.lang.alreadyMuted);
             return;
         }
 
@@ -47,12 +52,12 @@ public class MuteCommand extends SubCommand {
 
         Long duration = Utils.stringToPeriod(timeString);
         if (duration == null) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidTime);
+            MessageManager.sendMessage(user, Main.instance.lang.invalidTime);
             return;
         }
 
         target.mute(user, duration, reason.toString());
-        Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.muted);
+        MessageManager.sendMessage(user, Main.instance.lang.muted);
     }
 
     @Override

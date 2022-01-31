@@ -1,8 +1,8 @@
 package dev.lightdream.rustcore.managers.events;
 
 import dev.lightdream.api.dto.Item;
-import dev.lightdream.api.dto.PluginLocation;
 import dev.lightdream.api.dto.XMaterial;
+import dev.lightdream.api.dto.location.PluginLocation;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.RecyclingTable;
 import org.bukkit.Bukkit;

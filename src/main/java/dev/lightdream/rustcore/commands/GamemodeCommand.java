@@ -1,18 +1,23 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.GameMode;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "gm",
+        onlyForPlayers = true,
+        usage = "[0/1/2/3]"
+)
 public class GamemodeCommand extends SubCommand {
     public GamemodeCommand(@NotNull IAPI api) {
-        super(api, "gm", true, false, "[0/1/2/3]");
+        super(api);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -51,7 +56,7 @@ public class GamemodeCommand extends SubCommand {
                 return;
         }
 
-        Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.changedGamemode);
+        MessageManager.sendMessage(user, Main.instance.lang.changedGamemode);
     }
 
     @Override

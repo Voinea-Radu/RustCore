@@ -1,8 +1,8 @@
 package dev.lightdream.rustcore.managers.events;
 
-import dev.lightdream.api.databases.User;
 import dev.lightdream.api.dto.XMaterial;
 import dev.lightdream.rustcore.Main;
+import dev.lightdream.rustcore.database.User;
 import dev.lightdream.rustcore.gui.CraftingGUI;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,7 +34,7 @@ public class CraftingEvents implements Listener {
             return;
         }
 
-        new CraftingGUI(Main.instance, "general").open(user);
+        new CraftingGUI(Main.instance, user,"general").open(user);
         event.setCancelled(true);
     }
 

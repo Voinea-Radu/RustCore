@@ -1,13 +1,14 @@
 package dev.lightdream.rustcore.gui.passwordChest;
 
 import dev.lightdream.api.IAPI;
-import dev.lightdream.api.dto.GUIConfig;
-import dev.lightdream.api.dto.GUIItem;
+import dev.lightdream.api.dto.gui.GUIConfig;
+import dev.lightdream.api.dto.gui.GUIItem;
 import dev.lightdream.api.gui.GUI;
 import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.PasswordChest;
 import dev.lightdream.rustcore.database.User;
+import dev.lightdream.rustcore.gui.WithArgs;
 import dev.lightdream.rustcore.gui.functions.GUIFunctions;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
@@ -19,7 +20,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import java.util.HashMap;
 import java.util.List;
 
-public class OpenPasswordGUI extends GUI {
+public class OpenPasswordGUI extends GUI  implements WithArgs {
 
     public int index = -1;
     public String password = "";
@@ -27,13 +28,12 @@ public class OpenPasswordGUI extends GUI {
     public PasswordChest chest;
 
     public OpenPasswordGUI(IAPI api, User user, PasswordChest chest) {
-        super(api);
-        this.user = user;
+        super(api,user);
         this.chest = chest;
     }
 
     @Override
-    public String parse(String s, Player player) {
+    public String parse(String s, String s1, Integer integer) {
         return new MessageBuilder(s).addPlaceholders(new HashMap<String, String>() {{
             put("amount", String.valueOf(index + 1));
         }}).parseString();
@@ -55,7 +55,7 @@ public class OpenPasswordGUI extends GUI {
     }
 
     @Override
-    public boolean canAddItem(GUIItem guiItem, String s) {
+    public boolean canAddItem(GUIItem guiItem, String s, Integer integer) {
         if (guiItem.repeated) {
             index++;
             return index < guiItem.nextSlots.size();
@@ -95,6 +95,16 @@ public class OpenPasswordGUI extends GUI {
     @Override
     public void onPlayerInventoryClick(InventoryClickEvent inventoryClickEvent) {
 
+    }
+
+    @Override
+    public boolean preventClose() {
+        return false;
+    }
+
+    @Override
+    public void changePage(int i) {
+        getInventory().open(user.getPlayer(),i);
     }
 
     @SuppressWarnings("ConstantConditions")

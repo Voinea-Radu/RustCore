@@ -1,27 +1,26 @@
 package dev.lightdream.rustcore.database;
 
-import dev.lightdream.api.databases.EditableDatabaseEntry;
 import dev.lightdream.api.databases.User;
-import dev.lightdream.api.dto.LocationRange;
-import dev.lightdream.api.dto.PluginLocation;
-import dev.lightdream.libs.j256.field.DataType;
-import dev.lightdream.libs.j256.field.DatabaseField;
-import dev.lightdream.libs.j256.table.DatabaseTable;
+import dev.lightdream.api.dto.location.LocationRange;
+import dev.lightdream.api.dto.location.PluginLocation;
+import dev.lightdream.databasemanager.annotations.database.DatabaseField;
+import dev.lightdream.databasemanager.annotations.database.DatabaseTable;
+import dev.lightdream.databasemanager.dto.DatabaseEntry;
 import dev.lightdream.rustcore.Main;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 
-@DatabaseTable(tableName = "cupboards")
-public class CubBoard extends EditableDatabaseEntry {
+@DatabaseTable(table = "cupboards")
+public class CubBoard extends DatabaseEntry {
 
     @SuppressWarnings("unused")
-    @DatabaseField(columnName = "id", generatedId = true, canBeNull = false)
+    @DatabaseField(columnName = "id", autoGenerate = true)
     public int id;
-    @DatabaseField(columnName = "owners", dataType = DataType.SERIALIZABLE)
+    @DatabaseField(columnName = "owners")
     public HashSet<Integer> owners;
-    @DatabaseField(columnName = "location", dataType = DataType.SERIALIZABLE)
+    @DatabaseField(columnName = "location")
     public PluginLocation location;
 
     public boolean created;
@@ -153,11 +152,5 @@ public class CubBoard extends EditableDatabaseEntry {
     public void addEmerald(int amount) {
         this.emerald += amount;
         save();
-    }
-
-
-    @Override
-    public Integer getID() {
-        return this.id;
     }
 }

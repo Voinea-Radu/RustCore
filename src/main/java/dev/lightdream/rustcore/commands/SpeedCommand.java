@@ -1,16 +1,21 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "speed",
+        onlyForPlayers = true,
+        usage = "[amount]"
+)
 public class SpeedCommand extends SubCommand {
     public SpeedCommand(@NotNull IAPI api) {
-        super(api, "speed", true, false, "[amount]");
+        super(api);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -26,7 +31,7 @@ public class SpeedCommand extends SubCommand {
         try {
             amount = Integer.parseInt(amountString);
         } catch (NumberFormatException e) {
-            Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.invalidNumber);
+            MessageManager.sendMessage(user, Main.instance.lang.invalidNumber);
             return;
         }
 
@@ -36,7 +41,7 @@ public class SpeedCommand extends SubCommand {
             user.getPlayer().setWalkSpeed(getSpeed(amount, false));
         }
 
-        Main.instance.getMessageManager().sendMessage(user, Main.instance.lang.speedChanged);
+        MessageManager.sendMessage(user, Main.instance.lang.speedChanged);
     }
 
     @Override

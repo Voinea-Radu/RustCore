@@ -1,16 +1,21 @@
 package dev.lightdream.rustcore.commands;
 
 import dev.lightdream.api.IAPI;
+import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.database.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
+@dev.lightdream.api.annotations.commands.SubCommand(
+        parent = Main.MainCommand.class,
+        command = "list",
+        onlyForPlayers = true
+)
 public class ListCommand extends SubCommand {
     public ListCommand(@NotNull IAPI api) {
-        super(api, "list", true, false, "");
+        super(api);
     }
 
     @Override
@@ -23,7 +28,7 @@ public class ListCommand extends SubCommand {
 
         output.append(",");
         output = new StringBuilder(output.toString().replace(", ,", ""));
-        user.sendMessage(api, output.toString());
+        user.sendMessage(output.toString());
     }
 
     @Override

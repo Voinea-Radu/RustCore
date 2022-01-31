@@ -1,10 +1,12 @@
 package dev.lightdream.rustcore;
 
-import dev.lightdream.api.API;
+import dev.lightdream.api.IAPI;
 import dev.lightdream.api.LightDreamPlugin;
-import dev.lightdream.api.configs.SQLConfig;
+import dev.lightdream.api.commands.BaseCommand;
+import dev.lightdream.api.commands.SubCommand;
 import dev.lightdream.api.databases.User;
 import dev.lightdream.api.managers.MessageManager;
+import dev.lightdream.api.utils.MessageBuilder;
 import dev.lightdream.rustcore.commands.*;
 import dev.lightdream.rustcore.commands.bans.BanCommand;
 import dev.lightdream.rustcore.commands.bans.BanIpCommand;
@@ -17,31 +19,37 @@ import dev.lightdream.rustcore.config.Lang;
 import dev.lightdream.rustcore.managers.DatabaseManager;
 import dev.lightdream.rustcore.managers.EventManager;
 import dev.lightdream.rustcore.managers.ScheduleManager;
+import lombok.var;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.*;
+
 
 public final class Main extends LightDreamPlugin {
 
     public static Main instance;
 
     //Settings
-    public Config config;
-    public Lang lang;
     public Data data;
 
     //Managers
     public DatabaseManager databaseManager;
     public EventManager eventManager;
 
+    //Main Command
+    public MainCommand command;
+    public Config config;
+    public Lang lang;
+
     @Override
     public void onEnable() {
-        init("RustCore", "rc", "1.0");
+        init("RustCore", "rc");
         instance = this;
         databaseManager = new DatabaseManager(this);
         eventManager = new EventManager(this);
+        command = new MainCommand(this);
         new ScheduleManager(this);
     }
 
@@ -53,12 +61,15 @@ public final class Main extends LightDreamPlugin {
 
     @Override
     public void loadConfigs() {
-        sqlConfig = fileManager.load(SQLConfig.class);
-        config = fileManager.load(Config.class);
-        baseConfig = config;
-        lang = fileManager.load(Lang.class, fileManager.getFile(baseConfig.baseLang));
-        baseLang = lang;
+        super.loadConfigs();
         data = fileManager.load(Data.class);
+        config = fileManager.load(Config.class);
+        lang = fileManager.load(Lang.class);
+    }
+
+    @Override
+    public dev.lightdream.api.managers.DatabaseManager registerDatabaseManager() {
+        return null;
     }
 
     @Override
@@ -72,7 +83,12 @@ public final class Main extends LightDreamPlugin {
     }
 
     @Override
+    public void registerUser(Player player) {
+
+    }
+
     public void loadBaseCommands() {
+        var baseSubCommands = command.subCommands;
         baseSubCommands.add(new GiveCommand(this));
         baseSubCommands.add(new ClanCommand(this));
         baseSubCommands.add(new VanishCommand(this));
@@ -91,41 +107,85 @@ public final class Main extends LightDreamPlugin {
         baseSubCommands.add(new KickCommand(this));
         baseSubCommands.add(new ListCommand(this));
         baseSubCommands.add(new TPHereCommand(this));
+        baseSubCommands.add(new ExpertCommand(this));
     }
 
-    @Override
-    public MessageManager instantiateMessageManager() {
-        return new MessageManager(this, Main.class);
-    }
-
-    @Override
-    public void registerLangManager() {
-        API.instance.langManager.register(Main.class, getLangs());
-    }
-
-    @Override
-    public HashMap<String, Object> getLangs() {
-        HashMap<String, Object> langs = new HashMap<>();
-
-        baseConfig.langs.forEach(lang -> {
-            Lang l = fileManager.load(Lang.class, fileManager.getFile(lang));
-            langs.put(lang, l);
-        });
-
-        return langs;
-    }
 
     @Override
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
     }
+    public static class MainCommand extends BaseCommand {
+        public MainCommand(IAPI api) {
+            super(api);
+        }
 
-    @Override
-    public void setLang(Player player, String s) {
-        User user = databaseManager.getUser(player);
-        user.setLang(s);
-        databaseManager.save(user);
+        @Override
+        public void execute(User user, List<String> list) {
+            Iterator<SubCommand> var5;
+            SubCommand subCommand;
+            if (list.size() == 0) {
+                var5 = this.subCommands.iterator();
+
+                do {
+                    if (!var5.hasNext()) {
+                        this.sendUsage(user);
+                        return;
+                    }
+
+                    subCommand = var5.next();
+                } while(!subCommand.getCommand().equals(""));
+
+                subCommand.execute(user, list);
+            } else {
+                var5 = this.subCommands.iterator();
+
+                do {
+                    if (!var5.hasNext()) {
+                        MessageManager.sendMessage(user, new MessageBuilder(this.api.getLang().unknownCommand));
+                        return;
+                    }
+
+                    subCommand = var5.next();
+                } while(!(subCommand.getCommand().contains(list.get(0).toLowerCase())));
+
+                if (subCommand.onlyForPlayers() && user.getPlayer() == null) {
+                    MessageManager.sendMessage(user, new MessageBuilder(this.api.getLang().mustBeAPlayer));
+                } else if (subCommand.onlyForConsole() && user.getPlayer() != null) {
+                    MessageManager.sendMessage(user, new MessageBuilder(this.api.getLang().mustBeConsole));
+                } else if (user.hasPermission(subCommand.getPermission())) {
+                    MessageManager.sendMessage(user, new MessageBuilder(this.api.getLang().noPermission));
+                } else {
+                    subCommand.execute(user, new ArrayList<>(list.subList(1, list.size())));
+                }
+            }
+        }
+
+        @Override
+        public List<String> onTabComplete(User user, List<String> list) {
+            if (list == null) return Collections.emptyList();
+            if (list.size() < 2) {
+                var result = new ArrayList<String>();
+                if (list.isEmpty()) subCommands
+                        .stream()
+                        .filter(subCommand -> user.hasPermission(subCommand.getPermission()))
+                        .forEach(subCommand -> result.add(subCommand.getCommand()));
+                else subCommands
+                        .stream()
+                        .filter(subCommand -> user.hasPermission(subCommand.getPermission()) && subCommand.getCommand().startsWith(list.get(0)))
+                        .forEach(subcommand -> result.add(subcommand.getCommand()));
+                return result;
+            }
+            SubCommand command = null;
+            for (var command1 : subCommands) {
+                if (command1.getCommand().equalsIgnoreCase(list.get(0))) {
+                    command = command1;
+                    break;
+                }
+            }
+            if (command == null) sendUsage(user);
+            else return command.onTabComplete(user,new ArrayList<>(list.subList(1, list.size())));
+            return Collections.emptyList();
+        }
     }
-
-
 }
