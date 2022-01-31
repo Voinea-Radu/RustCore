@@ -15,13 +15,11 @@ public class RecyclingTable extends DatabaseEntry {
     public RecyclingTable(PluginLocation location) {
         super(Main.instance);
         this.location = location;
-        save();
     }
 
     @SuppressWarnings("unused")
     public RecyclingTable() {
         super(Main.instance);
-        save();
     }
 
     @Override

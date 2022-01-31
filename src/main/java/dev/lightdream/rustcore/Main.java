@@ -2,6 +2,7 @@ package dev.lightdream.rustcore;
 
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.LightDreamPlugin;
+import dev.lightdream.api.annotations.commands.Command;
 import dev.lightdream.api.commands.BaseCommand;
 import dev.lightdream.api.commands.SubCommand;
 import dev.lightdream.api.configs.JdaConfig;
@@ -125,6 +126,7 @@ public final class Main extends LightDreamPlugin {
         if (databaseManager == null) databaseManager = new DatabaseManager(this);
         return databaseManager;
     }
+    @Command(command = "rc")
     public static class MainCommand extends BaseCommand {
         public MainCommand(IAPI api) {
             super(api);

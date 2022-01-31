@@ -15,9 +15,6 @@ import java.util.HashSet;
 @DatabaseTable(table = "cupboards")
 public class CubBoard extends DatabaseEntry {
 
-    @SuppressWarnings("unused")
-    @DatabaseField(columnName = "id", autoGenerate = true)
-    public int id;
     @DatabaseField(columnName = "owners")
     public HashSet<Integer> owners;
     @DatabaseField(columnName = "location")
@@ -61,13 +58,11 @@ public class CubBoard extends DatabaseEntry {
         }
 
         this.created = true;
-        save();
     }
 
     @SuppressWarnings("unused")
     public CubBoard() {
         super(Main.instance);
-        save();
     }
 
     public LocationRange getProtectionRange() {

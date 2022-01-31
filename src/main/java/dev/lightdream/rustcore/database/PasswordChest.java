@@ -24,13 +24,11 @@ public class PasswordChest extends DatabaseEntry {
     public PasswordChest(PluginLocation pluginLocation) {
         super(Main.instance);
         this.location = pluginLocation;
-        save();
     }
 
     @SuppressWarnings("unused")
     public PasswordChest() {
         super(Main.instance);
-        save();
     }
 
     @SuppressWarnings("unused")

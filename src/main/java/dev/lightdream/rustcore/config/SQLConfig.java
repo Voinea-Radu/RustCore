@@ -1,6 +1,8 @@
 package dev.lightdream.rustcore.config;
 
+import dev.lightdream.api.dto.location.PluginLocation;
 import dev.lightdream.databasemanager.dto.DriverConfig;
+import dev.lightdream.rustcore.database.User;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +26,8 @@ public class SQLConfig extends dev.lightdream.databasemanager.dto.SQLConfig {
                 this.put(Long.class, "BIGINT");
                 this.put(Long.TYPE, "BIGINT");
                 this.put(HashSet.class,"BLOB");
+                this.put(PluginLocation.class,"BLOB");
+                this.put(User.class,"BLOB");
             }
         }, "AUTO_INCREMENT", "ORDER BY %order% DESC", "ORDER BY %order% ASC", "LIMIT %limit%");
         super.MARIADB = new DriverConfig.Driver(this.MYSQL);
@@ -45,6 +49,8 @@ public class SQLConfig extends dev.lightdream.databasemanager.dto.SQLConfig {
                 this.put(Long.class, "BIGINT");
                 this.put(Long.TYPE, "BIGINT");
                 this.put(HashSet.class,"BLOB");
+                this.put(PluginLocation.class,"BLOB");
+                this.put(User.class,"BLOB");
             }
         }, "PRIMARY KEY AUTOINCREMENT", "ORDER BY %order% DESC", "ORDER BY %order% ASC", "LIMIT %limit%");
     }

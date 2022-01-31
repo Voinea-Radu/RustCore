@@ -23,7 +23,6 @@ public class Mute extends DatabaseEntry {
         this.by = by;
         this.expire = System.currentTimeMillis() + duration;
         this.reason = reason;
-        save();
     }
 
     @SuppressWarnings("unused")

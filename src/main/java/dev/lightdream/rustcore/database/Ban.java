@@ -26,7 +26,6 @@ public class Ban extends DatabaseEntry {
         this.expire = System.currentTimeMillis() + duration;
         this.reason = reason;
         this.ip = ip;
-        save();
     }
 
     @SuppressWarnings("unused")

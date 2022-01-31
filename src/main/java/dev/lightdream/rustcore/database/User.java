@@ -16,12 +16,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor
 @DatabaseTable(table = "users")
-public class User extends dev.lightdream.api.databases.User {
+public class User extends dev.lightdream.api.databases.User implements Serializable {
 
     private final List<Recipe> activeRecipes = new ArrayList<>();
     @DatabaseField(columnName = "vanished")

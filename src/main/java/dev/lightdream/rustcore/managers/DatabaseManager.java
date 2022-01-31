@@ -3,7 +3,6 @@ package dev.lightdream.rustcore.managers;
 import dev.lightdream.api.IAPI;
 import dev.lightdream.api.dto.location.PluginLocation;
 import dev.lightdream.rustcore.database.*;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
@@ -11,12 +10,16 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
 public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager {
     public DatabaseManager(IAPI api) {
         super(api);
+    }
+    @Override
+    public void setup() {
         setup(User.class);
         setup(CubBoard.class);
         setup(RecyclingTable.class);
@@ -26,7 +29,6 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         setup(Mute.class);
         setup(BigFurnace.class);
     }
-
     public CubBoard getCupBoard(PluginLocation location) {
         return getCupBoard(location, false);
     }
@@ -49,31 +51,41 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
         return getAll(User.class).stream().anyMatch(user -> user.uuid.equals(uuid));
     }
 
-    public @NotNull User getUser(@NotNull UUID uuid, String ip) {
-        Optional<User> optionalUser = getAll(User.class).stream().filter(user -> user.uuid.equals(uuid)).findFirst();
-
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        }
-
-        User user = new User(uuid, Bukkit.getOfflinePlayer(uuid).getName(), ip);
-        save(user);
-        return user;
+    @Nullable
+    public User getUser(@NotNull final UUID uuid) {
+        return this.get(User.class, new HashMap<String, Object>() {
+            {
+                this.put("uuid", uuid);
+            }
+        }).stream().findFirst().orElse(null);
     }
 
-    @SuppressWarnings("unused")
-    public @Nullable User getUser(@NotNull String name) {
-        Optional<User> optionalUser = getAll(User.class).stream().filter(user -> user.name.equals(name)).findFirst();
+    @Nullable
+    public User getUser(@NotNull String name) {
+        Optional<User> optionalUser = this.getAll(User.class).stream().filter((user) -> user.name.equals(name)).findFirst();
         return optionalUser.orElse(null);
     }
 
+    public @NotNull User createUser(@NotNull OfflinePlayer player) {
+        User user = getUser(player.getUniqueId());
+        if (user == null) {
+            user = getUser(player.getName());
+        }
+        if (user != null) {
+            user.uuid = player.getUniqueId();
+        } else {
+            user = new User(player.getUniqueId(), player.getName(), player.isOnline() ? player.getPlayer().getAddress().getHostName() : "");
+        }
+        user.save();
+        return user;
+    }
     @SuppressWarnings("unused")
     public @NotNull User getUser(@NotNull OfflinePlayer player) {
-        return getUser(player.getUniqueId(), "");
+        return createUser(player);
     }
 
     public @NotNull User getUser(@NotNull Player player) {
-        return getUser(player.getUniqueId(), player.getAddress().getHostName());
+        return createUser(player);
     }
 
     @SuppressWarnings("unused")
@@ -165,6 +177,7 @@ public class DatabaseManager extends dev.lightdream.api.managers.DatabaseManager
     public @Nullable BigFurnace getBigFurnace(PluginLocation location) {
         return getAll(BigFurnace.class).stream().filter(bigFurnace -> bigFurnace.location.equals(location)).findFirst().orElse(null);
     }
+
 
 
 }

@@ -14,7 +14,6 @@ public class BigFurnace extends DatabaseEntry {
     public BigFurnace(PluginLocation location) {
         super(Main.instance);
         this.location = location;
-        save();
     }
 
     public BigFurnace() {

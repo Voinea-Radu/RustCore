@@ -27,21 +27,19 @@ public class Clan extends DatabaseEntry {
         this.owner = user;
         this.name = name;
         this.members.add(owner.id);
-        save();
         MessageManager.sendMessage(user, Main.instance.lang.clanCleared);
     }
 
     @SuppressWarnings("unused")
     public Clan() {
         super(Main.instance);
-        save();
     }
 
     @SuppressWarnings("unused")
     public void changeName(String name) {
         this.name = name;
         MessageManager.sendMessage(owner, Main.instance.lang.nameChanged);
-        save();
+        this.save();
     }
 
     public void changeOwner(User user) {
@@ -49,7 +47,7 @@ public class Clan extends DatabaseEntry {
         sendMessageToMembers(new MessageBuilder(Main.instance.lang.newOwner).addPlaceholders(new HashMap<String, String>() {{
             put("owner_name", owner.name);
         }}));
-        save();
+        this.save();
     }
 
     public void invite(User user) {
@@ -58,7 +56,7 @@ public class Clan extends DatabaseEntry {
             put("clan_name", name);
         }}));
         MessageManager.sendMessage(owner, Main.instance.lang.clanInviteSent);
-        save();
+        this.save();
     }
 
     public void join(User user) {
@@ -67,7 +65,7 @@ public class Clan extends DatabaseEntry {
         sendMessageToMembers(new MessageBuilder(Main.instance.lang.joinedClan).addPlaceholders(new HashMap<String, String>() {{
             put("player_name", user.name);
         }}));
-        save();
+        this.save();
     }
 
     public void leave(User user) {
@@ -75,7 +73,7 @@ public class Clan extends DatabaseEntry {
         sendMessageToMembers(new MessageBuilder(Main.instance.lang.leftClan).addPlaceholders(new HashMap<String, String>() {{
             put("player_name", user.name);
         }}));
-        save();
+        this.save();
     }
 
     public void sendMessageToMembers(MessageBuilder message) {
