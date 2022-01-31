@@ -33,6 +33,8 @@ public final class Main extends LightDreamPlugin {
 
     //Settings
     public Data data;
+    public Config config;
+    public Lang lang;
 
     //Managers
     public DatabaseManager databaseManager;
@@ -40,8 +42,6 @@ public final class Main extends LightDreamPlugin {
 
     //Main Command
     public MainCommand command;
-    public Config config;
-    public Lang lang;
 
     @Override
     public void onEnable() {
