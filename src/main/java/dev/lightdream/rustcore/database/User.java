@@ -4,6 +4,7 @@ package dev.lightdream.rustcore.database;
 import dev.lightdream.api.utils.ItemBuilder;
 import dev.lightdream.api.utils.ScoreBoardUtils;
 import dev.lightdream.databasemanager.annotations.database.DatabaseField;
+import dev.lightdream.databasemanager.annotations.database.DatabaseTable;
 import dev.lightdream.libs.fasterxml.annotation.JsonIgnore;
 import dev.lightdream.rustcore.Main;
 import dev.lightdream.rustcore.dto.Recipe;
@@ -19,6 +20,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor
+@DatabaseTable(table = "users")
 public class User extends dev.lightdream.api.databases.User {
 
     private final List<Recipe> activeRecipes = new ArrayList<>();

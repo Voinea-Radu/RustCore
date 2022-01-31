@@ -4,6 +4,7 @@ import dev.lightdream.api.IAPI;
 import dev.lightdream.api.LightDreamPlugin;
 import dev.lightdream.api.commands.BaseCommand;
 import dev.lightdream.api.commands.SubCommand;
+import dev.lightdream.api.configs.JdaConfig;
 import dev.lightdream.api.databases.User;
 import dev.lightdream.api.managers.MessageManager;
 import dev.lightdream.api.utils.MessageBuilder;
@@ -16,6 +17,7 @@ import dev.lightdream.rustcore.commands.mutes.UnMuteCommand;
 import dev.lightdream.rustcore.config.Config;
 import dev.lightdream.rustcore.config.Data;
 import dev.lightdream.rustcore.config.Lang;
+import dev.lightdream.rustcore.config.SQLConfig;
 import dev.lightdream.rustcore.managers.DatabaseManager;
 import dev.lightdream.rustcore.managers.EventManager;
 import dev.lightdream.rustcore.managers.ScheduleManager;
@@ -32,9 +34,9 @@ public final class Main extends LightDreamPlugin {
     public static Main instance;
 
     //Settings
-    public Data data;
     public Config config;
     public Lang lang;
+    public Data data;
 
     //Managers
     public DatabaseManager databaseManager;
@@ -43,13 +45,17 @@ public final class Main extends LightDreamPlugin {
     //Main Command
     public MainCommand command;
 
+    public Main() {
+        instance = this;
+    }
+
     @Override
     public void onEnable() {
         init("RustCore", "rc");
         instance = this;
-        databaseManager = new DatabaseManager(this);
         eventManager = new EventManager(this);
         command = new MainCommand(this);
+        loadBaseCommands();
         new ScheduleManager(this);
     }
 
@@ -61,15 +67,18 @@ public final class Main extends LightDreamPlugin {
 
     @Override
     public void loadConfigs() {
-        super.loadConfigs();
         data = fileManager.load(Data.class);
         config = fileManager.load(Config.class);
         lang = fileManager.load(Lang.class);
+        this.baseJdaConfig = this.fileManager.load(JdaConfig.class);
+        this.baseLang = lang;
+        this.sqlConfig = this.fileManager.load(SQLConfig.class);
     }
 
     @Override
     public dev.lightdream.api.managers.DatabaseManager registerDatabaseManager() {
-        return null;
+        if (databaseManager == null) databaseManager = new DatabaseManager(this);
+        return databaseManager;
     }
 
     @Override
@@ -113,6 +122,7 @@ public final class Main extends LightDreamPlugin {
 
     @Override
     public DatabaseManager getDatabaseManager() {
+        if (databaseManager == null) databaseManager = new DatabaseManager(this);
         return databaseManager;
     }
     public static class MainCommand extends BaseCommand {
